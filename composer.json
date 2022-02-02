@@ -36,7 +36,10 @@
         "psr-4": {
             "Tonysm\\TailwindCss\\": "src",
             "Tonysm\\TailwindCss\\Database\\Factories\\": "database/factories"
-        }
+        },
+        "files": [
+            "src/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
