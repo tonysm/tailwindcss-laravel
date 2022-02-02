@@ -19,6 +19,8 @@ class DownloadCommand extends Command
         $architectureToBinary = [
             'Linux-x86_64' => 'tailwindcss-linux-x64',
             'Linux-aarch64' => 'tailwindcss-linux-arm64',
+            'Darwin-arm64' => 'tailwindcss-macos-arm64',
+            'Darwin-x86_64' => 'tailwindcss-macos-x64',
         ];
 
         if (! $targetArchitecture = ($architectureToBinary["{$os}-{$cpu}"] ?? false)) {
