@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Tonysm\TailwindCss\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class TailwindCssCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'tailwindcss-laravel';
 
     public $description = 'My command';
 
