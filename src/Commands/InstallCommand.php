@@ -42,6 +42,7 @@ class InstallCommand extends Command
     {
         if (File::exists($to)) {
             $this->warn(sprintf("  File %s already exists.", $this->relativeOf($to)));
+
             return;
         }
 

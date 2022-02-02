@@ -4,7 +4,6 @@ namespace Tonysm\TailwindCss;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Tonysm\TailwindCss\Commands;
 
 class TailwindCssServiceProvider extends PackageServiceProvider
 {
