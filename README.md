@@ -1,19 +1,11 @@
-# This package wraps up the standalone executable version of the TailwindCSS framework.
+# Tailwind CSS for Laravel 
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/tonysm/tailwindcss-laravel.svg?style=flat-square)](https://packagist.org/packages/tonysm/tailwindcss-laravel)
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/tonysm/tailwindcss-laravel/run-tests?label=tests)](https://github.com/tonysm/tailwindcss-laravel/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/tonysm/tailwindcss-laravel/Check%20&%20fix%20styling?label=code%20style)](https://github.com/tonysm/tailwindcss-laravel/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/tonysm/tailwindcss-laravel.svg?style=flat-square)](https://packagist.org/packages/tonysm/tailwindcss-laravel)
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/tailwindcss-laravel.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/tailwindcss-laravel)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+This package wraps the standalone [Tailwind CSS CLI tool](https://tailwindcss.com/blog/standalone-cli). No Node.js required.
 
 ## Installation
 
@@ -23,37 +15,102 @@ You can install the package via composer:
 composer require tonysm/tailwindcss-laravel
 ```
 
-You can publish and run the migrations with:
+Optionally, you can publish the config file with:
 
 ```bash
-php artisan vendor:publish --tag="tailwindcss-laravel-migrations"
-php artisan migrate
-```
-
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag="tailwindcss-laravel-config"
-```
-
-This is the contents of the published config file:
-
-```php
-return [
-];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="tailwindcss-laravel-views"
+php artisan vendor:publish --tag="tailwindcss-config"
 ```
 
 ## Usage
 
-```php
-$tailwindCss = new Tonysm\TailwindCss();
-echo $tailwindCss->echoPhrase('Hello, Tonysm!');
+The package consists of 4 commands and a helper function.
+
+### Download the Tailwind CSS Standalone Binary
+
+Since each OS/CPU needs its own version of the compiled binary, the first thing you need to do is run the download command:
+
+```bash
+php artisan tailwindcss:download
+```
+
+This will detect the correct version based on your OS and CPU architecture.
+
+By default, it will place the binary at the root of your app. The binary will be called `tailwindcss`. You may want to add that line to your project's `.gitignore` file.
+
+Alternatively, you may configure the location of this binary file in the `config/tailwindcss.php` (make sure you export the config file if you want to do that).
+
+### Installing the Scaffolding
+
+There are some files needed for the setup to work. On a fresh Laravel application, you may run the install command, like so:
+
+```bash
+php artisan tailwindcss:install
+```
+
+This will ensure there's a `tailwind.config.js` file at the root of your project, as well as a `resources/css/app.css` file with the basic Tailwind CSS setup.
+
+### Building
+
+To build the Tailwind CSS styles, you may use the build command:
+
+```bash
+php artisan tailwindcss:build
+```
+
+By default, that will read your `resources/css/app.css` file and generate the compiled CSS file at `public/css/app.css`.
+
+You may want to generate a the final CSS file with a digest on the file name for cache busting reasons (ideal for production). You may do so with the `--digest` flag:
+
+```bash
+php artisan tailwindcss:build --digest
+```
+
+You may also want to generate a minified version of the final CSS file (ideal for production). You may do so with the `--minify` flag:
+
+```bash
+php artisan tailwindcss:build --minify
+```
+
+Combining these flags will make the ideal production combo:
+
+```bash
+php artisan tailwindcss:build --digest --minify
+```
+
+### Watching For File Changes
+
+When developing locally, it's handy to run the watch command, which will keep an eye on your local files and run a build again whenever you make a change locally:
+
+```bash
+php artisan tailwindcss:watch
+```
+
+_Note: the watch command is not meant to be used in combination with `--digest` or `--minify` flags._
+
+### Using the Compiled Asset
+
+To use the compiled asset, you may use the `tailwindcss` helper function instead of the `mix` function like so:
+
+```diff
+- <link rel="stylesheet" href="{{ mix('css/app.css') }}" >
++ <link rel="stylesheet" href="{{ tailwindcss('css/app.css') }}" >
+```
+
+That should be all you need.
+
+### Deploying Your App
+
+When deploying the app, make sure you add the ideal build combo to your deploy script:
+
+```bash
+php artisan tailwindcss:build --minify --digest
+```
+
+If you're running on a "fresh" app (or an isolated environment, like Vapor), and you have added the binary to your `.gitignore` file, make sure you also add the download command to your deploy script before the build one. In these environments, your deploy script should have these two lines
+
+```bash
+php artisan tailwindcss:download
+php artisan tailwindcss:build --minify --digest
 ```
 
 ## Testing
