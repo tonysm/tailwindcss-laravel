@@ -1,11 +1,24 @@
-# Tailwind CSS for Laravel 
+<h1 align="center">Tailwind CSS for Laravel</h1>
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/tonysm/tailwindcss-laravel.svg?style=flat-square)](https://packagist.org/packages/tonysm/tailwindcss-laravel)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/tonysm/tailwindcss-laravel/run-tests?label=tests)](https://github.com/tonysm/tailwindcss-laravel/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/tonysm/tailwindcss-laravel/Check%20&%20fix%20styling?label=code%20style)](https://github.com/tonysm/tailwindcss-laravel/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/tonysm/tailwindcss-laravel.svg?style=flat-square)](https://packagist.org/packages/tonysm/tailwindcss-laravel)
+<p align="center">
+    <a href="https://packagist.org/packages/tonysm/tailwindcss-laravel">
+        <img src="https://img.shields.io/packagist/dt/tonysm/tailwindcss-laravel.svg?style=flat-square" alt="Total Downloads">
+    </a>
+    <a href="https://packagist.org/packages/tonysm/tailwindcss-laravel">
+        <img src="https://img.shields.io/packagist/v/tonysm/tailwindcss-laravel" alt="Latest Stable Version">
+    </a>
+    <a href="https://packagist.org/packages/tonysm/tailwindcss-laravel">
+        <img src="https://img.shields.io/packagist/l/tonysm/tailwindcss-laravel" alt="License">
+    </a>
+</p>
+
+## Introduction
 
 This package wraps the standalone [Tailwind CSS CLI tool](https://tailwindcss.com/blog/standalone-cli). No Node.js required.
+
+### Inspiration
+
+This package was inspired by the [Tailwind CSS for Rails](https://github.com/rails/tailwindcss-rails) gem.
 
 ## Installation
 
