@@ -72,7 +72,7 @@ php artisan tailwindcss:build
 
 By default, that will read your `resources/css/app.css` file and generate the compiled CSS file at `public/css/app.css`.
 
-You may want to generate a the final CSS file with a digest on the file name for cache busting reasons (ideal for production). You may do so with the `--digest` flag:
+You may want to generate the final CSS file with a digest on the file name for cache busting reasons (ideal for production). You may do so with the `--digest` flag:
 
 ```bash
 php artisan tailwindcss:build --digest
