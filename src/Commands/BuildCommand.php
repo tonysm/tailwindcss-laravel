@@ -76,12 +76,12 @@ class BuildCommand extends Command
 
     private function shouldVersion(): bool
     {
-        return $this->option('digest') || $this->option('production');
+        return $this->option('digest') || $this->option('prod');
     }
 
     private function shouldMinify(): bool
     {
-        return $this->option('minify') || $this->option('production');
+        return $this->option('minify') || $this->option('prod');
     }
 
     protected function ensureAssetIsVersioned(string $generatedFile): string
