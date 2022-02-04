@@ -87,7 +87,7 @@ php artisan tailwindcss:build --minify
 Combining these flags will make the ideal production combo:
 
 ```bash
-php artisan tailwindcss:build --digest --minify
+php artisan tailwindcss:build --prod
 ```
 
 ### Watching For File Changes

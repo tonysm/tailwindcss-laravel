@@ -14,6 +14,7 @@ class BuildCommand extends Command
         {--watch : If you want to keep the process running to watch your local file changes.}
         {--minify : If you want the final CSS file to be minified.}
         {--digest : If you want the final CSS file to be generated using a digest of its contents (does not work with the --watch flag).}
+        {--prod : This option combines the --minify and --digest options. Ideal for production.}
     ';
     protected $description = 'Generates a new build of Tailwind CSS for your project.';
 
@@ -35,7 +36,7 @@ class BuildCommand extends Command
         File::ensureDirectoryExists(dirname($generatedFile));
         File::cleanDirectory(dirname($generatedFile));
 
-        if ($this->option('watch') || ! $this->option('digest')) {
+        if ($this->option('watch') || ! $this->shouldVersion()) {
             // Ensure there is at least one mix-manifest.json that points to the unversioned asset...
             File::put(public_path('/tailwindcss-manifest.json'), json_encode([
                 '/css/app.css' => $generatedFileRelativePath,
@@ -47,7 +48,7 @@ class BuildCommand extends Command
             '-i', config('tailwindcss.build.source_file_path'),
             '-o', $generatedFile,
             $this->option('watch') ? '-w' : null,
-            $this->option('minify') ? '-m' : null,
+            $this->shouldMinify() ? '-m' : null,
         ]), timeout: null);
 
         $process->setPty(true);
@@ -56,11 +57,11 @@ class BuildCommand extends Command
             $this->output->write($buffer);
         });
 
-        if ($this->option('digest')) {
+        if ($this->shouldVersion()) {
             $generatedFile = $this->ensureAssetIsVersioned($generatedFile);
         }
 
-        if (! $this->option('watch') && $this->option('digest')) {
+        if (! $this->option('watch') && $this->shouldVersion()) {
             $this->info('Generating the versioned tailwindcss-manifest.json file...');
 
             File::put(public_path('/tailwindcss-manifest.json'), json_encode([
@@ -71,6 +72,16 @@ class BuildCommand extends Command
         $this->info('Done!');
 
         return self::SUCCESS;
+    }
+
+    private function shouldVersion(): bool
+    {
+        return $this->option('digest') || $this->option('production');
+    }
+
+    private function shouldMinify(): bool
+    {
+        return $this->option('minify') || $this->option('production');
     }
 
     protected function ensureAssetIsVersioned(string $generatedFile): string
