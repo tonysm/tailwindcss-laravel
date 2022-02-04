@@ -84,7 +84,7 @@ You may also want to generate a minified version of the final CSS file (ideal fo
 php artisan tailwindcss:build --minify
 ```
 
-Combining these flags will make the ideal production combo:
+Combining these two flags makes the ideal production combo. Alternatively, you may prefer using a single `--prod` flag instead, which is essentially the same thing, but shorter:
 
 ```bash
 php artisan tailwindcss:build --prod
