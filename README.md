@@ -116,14 +116,14 @@ That should be all you need.
 When deploying the app, make sure you add the ideal build combo to your deploy script:
 
 ```bash
-php artisan tailwindcss:build --minify --digest
+php artisan tailwindcss:build --prod
 ```
 
 If you're running on a "fresh" app (or an isolated environment, like Vapor), and you have added the binary to your `.gitignore` file, make sure you also add the download command to your deploy script before the build one. In these environments, your deploy script should have these two lines
 
 ```bash
 php artisan tailwindcss:download
-php artisan tailwindcss:build --minify --digest
+php artisan tailwindcss:build --prod
 ```
 
 ## Testing
