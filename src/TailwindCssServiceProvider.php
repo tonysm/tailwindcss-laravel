@@ -17,10 +17,11 @@ class TailwindCssServiceProvider extends PackageServiceProvider
         $package
             ->name('tailwindcss')
             ->hasConfigFile()
-            ->hasCommand(Commands\DownloadCommand::class)
-            ->hasCommand(Commands\InstallCommand::class)
-            ->hasCommand(Commands\BuildCommand::class)
-            ->hasCommand(Commands\WatchCommand::class)
-        ;
+            ->hasCommands([
+                Commands\DownloadCommand::class,
+                Commands\InstallCommand::class,
+                Commands\BuildCommand::class,
+                Commands\WatchCommand::class,
+            ]);
     }
 }
