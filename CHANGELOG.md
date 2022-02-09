@@ -2,6 +2,12 @@
 
 All notable changes to `tailwindcss-laravel` will be documented in this file.
 
+## 0.1.0 - 2022-02-09
+
+### Changelog
+
+- **CHANGED**: Laravel 9 support (nothing changed, just the version constraints)
+
 ## 0.0.3 - 2022-02-04
 
 ### Changelog
