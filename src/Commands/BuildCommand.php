@@ -34,7 +34,6 @@ class BuildCommand extends Command
         $generatedFile = config('tailwindcss.build.destination_file_path');
         $generatedFileRelativePath = Str::after($generatedFile, rtrim(public_path(), '/'));
 
-        File::ensureDirectoryExists(dirname(Manifest::path()));
         File::ensureDirectoryExists(dirname($generatedFile));
         File::cleanDirectory(dirname($generatedFile));
 
@@ -64,7 +63,7 @@ class BuildCommand extends Command
         }
 
         if (! $this->option('watch') && $this->shouldVersion()) {
-            $this->info('Generating the versioned tailwindcss-manifest.json file...');
+            $this->info(sprintf('Generating the versioned %s file...', Manifest::filename()));
 
             File::put(Manifest::path(), json_encode([
                 '/css/app.css' => Str::after($generatedFile, rtrim(dirname(Manifest::path()), '/')),

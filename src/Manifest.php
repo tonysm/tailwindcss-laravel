@@ -8,6 +8,11 @@ use Illuminate\Support\Str;
 
 class Manifest
 {
+    public static function filename(): string
+    {
+        return basename(self::path());
+    }
+
     public static function path(): string
     {
         return config('tailwindcss.build.manifest_file_path');
