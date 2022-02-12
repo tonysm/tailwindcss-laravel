@@ -34,6 +34,7 @@ class BuildCommand extends Command
         $generatedFile = config('tailwindcss.build.destination_file_path');
         $generatedFileRelativePath = Str::after($generatedFile, rtrim(public_path(), '/'));
 
+        File::ensureDirectoryExists(dirname(Manifest::path()));
         File::ensureDirectoryExists(dirname($generatedFile));
         File::cleanDirectory(dirname($generatedFile));
 
