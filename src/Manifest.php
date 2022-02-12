@@ -8,6 +8,11 @@ use Illuminate\Support\Str;
 
 class Manifest
 {
+    public static function path(): string
+    {
+        return config('tailwindcss.build.manifest_file_path');
+    }
+
     public function __invoke(string $path)
     {
         static $manifests = [];
@@ -16,7 +21,7 @@ class Manifest
             $path = "/{$path}";
         }
 
-        $manifestPath = public_path('/tailwindcss-manifest.json');
+        $manifestPath = static::path();
 
         if (! isset($manifests[$manifestPath])) {
             if (! is_file($manifestPath)) {

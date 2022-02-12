@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Symfony\Component\Process\Process;
+use Tonysm\TailwindCss\Manifest;
 
 class BuildCommand extends Command
 {
@@ -38,7 +39,7 @@ class BuildCommand extends Command
 
         if ($this->option('watch') || ! $this->shouldVersion()) {
             // Ensure there is at least one mix-manifest.json that points to the unversioned asset...
-            File::put(public_path('/tailwindcss-manifest.json'), json_encode([
+            File::put(Manifest::path(), json_encode([
                 '/css/app.css' => $generatedFileRelativePath,
             ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         }
@@ -64,8 +65,8 @@ class BuildCommand extends Command
         if (! $this->option('watch') && $this->shouldVersion()) {
             $this->info('Generating the versioned tailwindcss-manifest.json file...');
 
-            File::put(public_path('/tailwindcss-manifest.json'), json_encode([
-                '/css/app.css' => Str::after($generatedFile, rtrim(public_path(), '/')),
+            File::put(Manifest::path(), json_encode([
+                '/css/app.css' => Str::after($generatedFile, rtrim(dirname(Manifest::path()), '/')),
             ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         }
 
