@@ -2,6 +2,12 @@
 
 All notable changes to `tailwindcss-laravel` will be documented in this file.
 
+## 0.2.0 - 2022-02-13
+
+### Changelog
+
+- **CHANGED**: added a [new config entry for the manifest location path](https://github.com/tonysm/tailwindcss-laravel/blob/main/config/tailwindcss.php#L17). Also, the manifest is now prefixed with a dot. That's because Vapor will include dot files in the `public/` folder by default. I know that's something users can ignore, but that should do it for now. If you have published the `tailwindcss.php` config file, make sure to republish that.
+
 ## 0.1.0 - 2022-02-09
 
 ### Changelog
