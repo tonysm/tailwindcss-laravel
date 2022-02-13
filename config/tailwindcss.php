@@ -27,7 +27,7 @@ return [
      | Use the `tailwindcss:download` Artisan command to ensure the binary is there.
      |
      */
-    'bin_path' => base_path('tailwindcss'),
+    'bin_path' => PHP_OS === 'WINNT' ? base_path('tailwindcss.exe') : base_path('tailwindcss'),
 
     /*
      |---------------------------------------------------------------------
