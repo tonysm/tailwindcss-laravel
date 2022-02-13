@@ -2,6 +2,20 @@
 
 All notable changes to `tailwindcss-laravel` will be documented in this file.
 
+## 0.3.0 - 2022-02-13
+
+### Changelog
+
+- **CHANGED**: the `tailwindcss.php` config was updated: instead of specifying the destination file path, you define a destination PATH, we'll construct the full file path based on the source file relative path.
+- **CHANGED**: The binary destination file in the `tailwindcss.php` now checks if the file destination should end with `.exe` or not (for Windows support)
+- **FIXED**: the `tailwindcss:download` and `tailwindcss:build` commands now are working on Windows machines.
+- **NEW**: Increase `tailwindcss:download` default timeout when downloading the binary and allow users overriding it with the `--timeout` flag (accepts seconds)
+
+
+---
+
+**If you have published the config, please, republish it again** (no need to publish it if you haven't done that yet)
+
 ## 0.2.0 - 2022-02-13
 
 ### Changelog
