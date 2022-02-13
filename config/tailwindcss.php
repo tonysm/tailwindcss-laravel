@@ -13,7 +13,7 @@ return [
      */
     'build' => [
         'source_file_path' => resource_path('css/app.css'),
-        'destination_file_path' => public_path('dist/css/app.css'),
+        'destination_path' => public_path('dist'),
         'manifest_file_path' => public_path('.tailwindcss-manifest.json'),
     ],
 
