@@ -4,7 +4,6 @@ namespace Tonysm\TailwindCss\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 use Symfony\Component\Process\Process;
 use Tonysm\TailwindCss\Manifest;
 
@@ -31,23 +30,26 @@ class BuildCommand extends Command
 
         $this->info('Building assets...');
 
-        $generatedFile = config('tailwindcss.build.destination_file_path');
-        $generatedFileRelativePath = Str::after($generatedFile, rtrim(public_path(), '/'));
+        $sourcePath = $this->fixFilePathForOs(config('tailwindcss.build.source_file_path'));
+        $sourceRelativePath = str_replace(rtrim(resource_path(), DIRECTORY_SEPARATOR), '', $sourcePath);
+        $destinationPath = $this->fixFilePathForOs(config('tailwindcss.build.destination_path'));
+        $destinationFileAbsolutePath = $destinationPath . DIRECTORY_SEPARATOR . trim($sourceRelativePath, DIRECTORY_SEPARATOR);
+        $destinationFileRelativePath = str_replace(rtrim(public_path(), DIRECTORY_SEPARATOR), '', $destinationFileAbsolutePath);
 
-        File::ensureDirectoryExists(dirname($generatedFile));
-        File::cleanDirectory(dirname($generatedFile));
+        File::ensureDirectoryExists(dirname($destinationFileAbsolutePath));
+        File::cleanDirectory(dirname($destinationFileAbsolutePath));
 
         if ($this->option('watch') || ! $this->shouldVersion()) {
             // Ensure there is at least one mix-manifest.json that points to the unversioned asset...
             File::put(Manifest::path(), json_encode([
-                '/css/app.css' => $generatedFileRelativePath,
+                $this->fixOsFilePathToUriPath($sourceRelativePath) => $this->fixOsFilePathToUriPath($destinationFileRelativePath),
             ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         }
 
         $process = new Process(array_filter([
             $binFile,
-            '-i', config('tailwindcss.build.source_file_path'),
-            '-o', $generatedFile,
+            '-i', $sourcePath,
+            '-o', $destinationFileAbsolutePath,
             $this->option('watch') ? '-w' : null,
             $this->shouldMinify() ? '-m' : null,
         ]), timeout: null);
@@ -59,20 +61,31 @@ class BuildCommand extends Command
         });
 
         if ($this->shouldVersion()) {
-            $generatedFile = $this->ensureAssetIsVersioned($generatedFile);
+            $destinationFileAbsolutePath = $this->ensureAssetIsVersioned($destinationFileAbsolutePath);
+            $destinationFileRelativePath = str_replace(rtrim(public_path(), DIRECTORY_SEPARATOR), '', $destinationFileAbsolutePath);
         }
 
         if (! $this->option('watch') && $this->shouldVersion()) {
             $this->info(sprintf('Generating the versioned %s file...', Manifest::filename()));
 
             File::put(Manifest::path(), json_encode([
-                '/css/app.css' => Str::after($generatedFile, rtrim(dirname(Manifest::path()), '/')),
+                $this->fixOsFilePathToUriPath($sourceRelativePath) => $this->fixOsFilePathToUriPath($destinationFileRelativePath),
             ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         }
 
         $this->info('Done!');
 
         return self::SUCCESS;
+    }
+
+    private function fixFilePathForOs(string $path): string
+    {
+        return str_replace('/', DIRECTORY_SEPARATOR, $path);
+    }
+
+    private function fixOsFilePathToUriPath(string $path): string
+    {
+        return str_replace(DIRECTORY_SEPARATOR, '/', $path);
     }
 
     private function shouldVersion(): bool

@@ -13,7 +13,7 @@ return [
      */
     'build' => [
         'source_file_path' => resource_path('css/app.css'),
-        'destination_file_path' => public_path('dist/css/app.css'),
+        'destination_path' => public_path('dist'),
         'manifest_file_path' => public_path('.tailwindcss-manifest.json'),
     ],
 
@@ -27,7 +27,7 @@ return [
      | Use the `tailwindcss:download` Artisan command to ensure the binary is there.
      |
      */
-    'bin_path' => base_path('tailwindcss'),
+    'bin_path' => PHP_OS === 'WINNT' ? base_path('tailwindcss.exe') : base_path('tailwindcss'),
 
     /*
      |---------------------------------------------------------------------

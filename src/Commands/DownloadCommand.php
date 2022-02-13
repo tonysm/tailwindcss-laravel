@@ -8,7 +8,11 @@ use Illuminate\Support\Facades\Http;
 
 class DownloadCommand extends Command
 {
-    protected $signature = 'tailwindcss:download {--force : If the file already exists, we will not touch it. Use this flag if you want to replace it with a new version.}';
+    protected $signature = 'tailwindcss:download
+        {--force : If the file already exists, we will not touch it. Use this flag if you want to replace it with a new version.}
+        {--timeout=600 : Timeout in seconds. Defaults to 5 mins (600s).}
+    ';
+
     protected $description = 'Downloads the Tailwind CSS binary for the version specified in your config/tailwindcss.php.';
 
     public function handle()
@@ -21,6 +25,7 @@ class DownloadCommand extends Command
             'Linux-aarch64' => 'tailwindcss-linux-arm64',
             'Darwin-arm64' => 'tailwindcss-macos-arm64',
             'Darwin-x86_64' => 'tailwindcss-macos-x64',
+            'Windows NT-AMD64' => 'tailwindcss-windows-x64.exe',
         ];
 
         if (! $targetArchitecture = ($architectureToBinary["{$os}-{$cpu}"] ?? false)) {
@@ -40,7 +45,8 @@ class DownloadCommand extends Command
 
         $this->info(sprintf('Downloading the Tailwind CSS binary (%s/%s/%s)...', $os, $cpu, $targetVersion));
 
-        $contents = Http::get($this->downloadUrl($targetArchitecture, $targetVersion))
+        $contents = Http::timeout($this->option('timeout'))
+            ->get($this->downloadUrl($targetArchitecture, $targetVersion))
             ->throw()
             ->body();
 
