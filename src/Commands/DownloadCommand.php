@@ -11,7 +11,7 @@ class DownloadCommand extends Command
     protected $signature = 'tailwindcss:download
         {--force : If the file already exists, we will not touch it. Use this flag if you want to replace it with a new version.}
         {--timeout=600 : Timeout in seconds. Defaults to 5 mins (600s).}
-        {--version= : You may specify the version you want to force the download. Defaults to the configured one.}
+        {--cli-version= : You may specify the version you want to force the download. Defaults to the configured one.}
     ';
 
     protected $description = 'Downloads the Tailwind CSS binary for the version specified in your config/tailwindcss.php.';
