@@ -32,7 +32,7 @@ class InstallCommand extends Command
 
         if ($this->option('download')) {
             $this->call('tailwindcss:download', [
-                '--cli-version' => $this->option('version') ?: config('tailwindcss.version'),
+                '--cli-version' => $this->option('cli-version') ?: config('tailwindcss.version'),
             ]);
         } else {
             $this->info('Done!');

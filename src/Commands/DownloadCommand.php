@@ -36,7 +36,7 @@ class DownloadCommand extends Command
         }
 
         $targetPath = config('tailwindcss.bin_path');
-        $targetVersion = $this->option('version') ?: config('tailwindcss.version');
+        $targetVersion = $this->option('cli-version') ?: config('tailwindcss.version');
 
         if (File::exists($targetPath) && ! $this->option('force')) {
             $this->warn('Tailwind CSS binary already exists. Use the --force flag if you want to override it.');
