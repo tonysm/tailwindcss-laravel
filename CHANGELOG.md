@@ -2,6 +2,14 @@
 
 All notable changes to `tailwindcss-laravel` will be documented in this file.
 
+## 0.4.0 - 2022-04-12
+
+### Changelog
+
+- Adds a `TAILWINDCSS_CLI_VERSION` envvar to allow overriding it without publishing the config file
+- Bumps the default CLI version to `v3.0.24`
+- Adds a new `--cli-version` option to the `tailwindcss:install` and `tailwindcss:download` commands which may be used by passing the `--cli-version="v3.0.24"`
+
 ## 0.3.0 - 2022-02-13
 
 ### Changelog
