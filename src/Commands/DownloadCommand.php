@@ -58,6 +58,7 @@ class DownloadCommand extends Command
         }
 
         File::ensureDirectoryExists(dirname($targetPath));
+        File::delete($targetPath);
         File::put($targetPath, $contents);
         File::chmod($targetPath, 0755);
 
