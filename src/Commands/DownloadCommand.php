@@ -11,6 +11,7 @@ class DownloadCommand extends Command
     protected $signature = 'tailwindcss:download
         {--force : If the file already exists, we will not touch it. Use this flag if you want to replace it with a new version.}
         {--timeout=600 : Timeout in seconds. Defaults to 5 mins (600s).}
+        {--version= : You may specify the version you want to force the download. Defaults to the configured one.}
     ';
 
     protected $description = 'Downloads the Tailwind CSS binary for the version specified in your config/tailwindcss.php.';
@@ -35,7 +36,7 @@ class DownloadCommand extends Command
         }
 
         $targetPath = config('tailwindcss.bin_path');
-        $targetVersion = config('tailwindcss.version');
+        $targetVersion = $this->option('version') ?: config('tailwindcss.version');
 
         if (File::exists($targetPath) && ! $this->option('force')) {
             $this->warn('Tailwind CSS binary already exists. Use the --force flag if you want to override it.');

@@ -11,6 +11,7 @@ class InstallCommand extends Command
     protected $signature = '
         tailwindcss:install
         {--download : If you also want to download the Tailwind CSS binary.}
+        {--version= : You may override the configured version for the CLI.}
     ';
 
     protected $description = 'Installs the Tailwind CSS scaffolding for new Laravel applications.';
@@ -30,7 +31,9 @@ class InstallCommand extends Command
         );
 
         if ($this->option('download')) {
-            $this->call('tailwindcss:download');
+            $this->call('tailwindcss:download', [
+                '--version' => $this->option('version') ?: config('tailwindcss.version'),
+            ]);
         } else {
             $this->info('Done!');
         }
