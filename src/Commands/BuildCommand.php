@@ -53,7 +53,7 @@ class BuildCommand extends Command
             $this->option('watch') ? '-w' : null,
             $this->shouldMinify() ? '-m' : null,
         ]), timeout: null);
-
+        $process->setWorkingDirectory(base_path());
         $process->setPty(true);
 
         $process->run(function ($type, $buffer) {
