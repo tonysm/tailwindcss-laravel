@@ -2,13 +2,6 @@
 
 All notable changes to `tailwindcss-laravel` will be documented in this file.
 
-## 0.4.1 - 2022-04-29
-
-### Changelog
-
-- **FIXED**: Set the working directory explicitly to `base_path()`
-
-
 ## 0.4.0 - 2022-04-12
 
 ### Changelog
