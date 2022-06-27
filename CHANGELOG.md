@@ -2,6 +2,12 @@
 
 All notable changes to `tailwindcss-laravel` will be documented in this file.
 
+## 0.5.0 - 2022-06-27
+
+### Changelog
+
+- Changes default scaffolding from using `@tailwind` to using `@import` (https://github.com/tonysm/tailwindcss-laravel/commit/bcc0b9d09cdb375cad59020c670c05b51dae01fa)
+
 ## 0.4.1 - 2022-05-01
 
 ### Changelog
