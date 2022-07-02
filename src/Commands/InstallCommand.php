@@ -116,7 +116,7 @@ class InstallCommand extends Command
 
     private function replaceMixStylesToLayouts()
     {
-        $this->existingLayouts()
+        $this->existingLayoutFiles()
             ->each(fn ($file) => File::put(
                 $file,
                 str_replace(
@@ -129,7 +129,7 @@ class InstallCommand extends Command
 
     private function replaceViteStylesToLayouts()
     {
-        $this->existingLayouts()
+        $this->existingLayoutFiles()
             ->each(fn ($file) => File::put(
                 $file,
                 preg_replace(
