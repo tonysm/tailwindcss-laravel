@@ -2,6 +2,12 @@
 
 All notable changes to `tailwindcss-laravel` will be documented in this file.
 
+## 0.6.0 - 2022-07-03
+
+### Changelog
+
+- **CHANGED**: The `tailwindcss:install` command was changed to work with the new frontend setup in Laravel 9, which uses Vite instead of Mix. It should also keep working on installs in Laravel apps using Mix. Of course, it also works on apps using neither (**cough* *cough** Importmap Laravel)
+
 ## 0.5.1 - 2022-06-27
 
 ### Changelog
