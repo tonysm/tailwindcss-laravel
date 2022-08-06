@@ -2,6 +2,12 @@
 
 All notable changes to `tailwindcss-laravel` will be documented in this file.
 
+## 0.7.0 - 2022-08-06
+
+### Changelog
+
+- Bumps default Tailwind CLI version to 3.1.8 (https://github.com/tonysm/tailwindcss-laravel/commit/575332c3710d8a1a9beda423740c458ede68402c)
+
 ## 0.6.0 - 2022-07-03
 
 ### Changelog
