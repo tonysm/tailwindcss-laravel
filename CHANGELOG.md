@@ -2,6 +2,12 @@
 
 All notable changes to `tailwindcss-laravel` will be documented in this file.
 
+## 0.8.0 - 2022-11-17
+
+### Changelog
+
+- **NEW**: The `tailwindcss()` function throws an exception when the manifest file is missing. When testing, we don't want that behavior as we don't always need to compile our styles to run the tests (sometimes we do). For that reason, you may now use the new `InteractsWithTailwind` trait and call the `$this->withoutTailwind()` method on your tests (or in the base TestCase) to disable the missing manifest exception on your tests. Initial work by @andreasnij (thanks!)
+
 ## 0.7.0 - 2022-08-06
 
 ### Changelog
