@@ -1,14 +1,14 @@
 <?php
 
-use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
 use Tonysm\TailwindCss\Testing\InteractsWithTailwind;
 
 uses(InteractsWithTailwind::class);
 
 beforeEach(function () {
     Route::get('_testing/missing-manifest', function () {
-        return Blade::render('{{ tailwindcss("css/app.css") }}');
+        return View::file(__DIR__ . '/stubs/welcome.blade.php');
     });
 });
 
