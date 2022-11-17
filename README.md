@@ -170,10 +170,12 @@ class ExampleTest extends BaseTestCase
     /** @test */
     public function throws_exception_when_manifest_is_missing()
     {
-        $this->expectException(Exception::class)
-            ->withoutExceptionHandling()
-            ->get(route('login'))
-            ->fail('Expected exception to be thrown, but it did not.');
+        $this->expectException(Exception::class);
+
+        $this->withoutExceptionHandling()
+            ->get(route('login'));
+
+        $this->fail('Expected exception to be thrown, but it did not.');
     }
 
     /** @test */

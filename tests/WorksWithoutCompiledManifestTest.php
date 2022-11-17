@@ -15,7 +15,10 @@ beforeEach(function () {
 it('throws exception when missing manifest', function () {
     $this->expectException(Exception::class);
     $this->expectExceptionMessage('The Tailwind CSS manifest does not exist.');
-    $this->withoutExceptionHandling()->get('_testing/missing-manifest');
+
+    $this->withoutExceptionHandling()
+        ->get('_testing/missing-manifest');
+
     $this->fail('Expected an exception to be thrown, but it did not.');
 });
 
