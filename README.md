@@ -136,10 +136,13 @@ The `tailwindcss()` function will throw an exception when the manifest file is m
 namespace Tests;
 
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Tonysm\TailwindCss\Testing\InteractsWithTailwind;
 
 abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
+    use InteractsWithTailwind;
+
 
     protected function setUp(): void
     {
