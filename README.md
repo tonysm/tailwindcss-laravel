@@ -160,10 +160,11 @@ Alternatively, you may also use the trait on specific test cases if you want to,
 
 namespace Tests;
 
-use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Exception;
+use Tests\TestCase;
 use Tonysm\TailwindCss\Testing\InteractsWithTailwind;
 
-class ExampleTest extends BaseTestCase
+class ExampleTest extends TestCase
 {
     use InteractsWithTailwind;
 
