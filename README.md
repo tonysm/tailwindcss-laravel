@@ -126,11 +126,64 @@ php artisan tailwindcss:download
 php artisan tailwindcss:build --prod
 ```
 
-## Testing
+### Mock Manifest When Testing
 
-```bash
-composer test
+The `tailwindcss()` function will throw an exception when the manifest file is missing. However, we don't always need the manifest file when running our tests. You may use the `InteractsWithTailwind` trait in your main TestCase to disable that exception throwing:
+
+```php
+<?php
+
+namespace Tests;
+
+use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+
+abstract class TestCase extends BaseTestCase
+{
+    use CreatesApplication;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->withoutTailwind();
+    }
+}
 ```
+
+Alternatively, you may also use the trait on specific test cases if you want to, so we can toggle that behavior as you need:
+
+```php
+<?php
+
+namespace Tests;
+
+use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Tonysm\TailwindCss\Testing\InteractsWithTailwind;
+
+class ExampleTest extends BaseTestCase
+{
+    use InteractsWithTailwind;
+
+    /** @test */
+    public function throws_exception_when_manifest_is_missing()
+    {
+        $this->expectException(Exception::class)
+            ->withoutExceptionHandling()
+            ->get(route('login'))
+            ->fail('Expected exception to be thrown, but it did not.');
+    }
+
+    /** @test */
+    public function can_disable_tailwindcss_exception()
+    {
+        $this->withoutTailwind()
+            ->get(route('login'))
+            ->assertOk();
+    }
+}
+```
+
+Both tests should pass.
 
 ## Changelog
 
