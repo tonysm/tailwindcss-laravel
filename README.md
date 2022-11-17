@@ -135,6 +135,7 @@ The `tailwindcss()` function will throw an exception when the manifest file is m
 
 namespace Tests;
 
+use Exception;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Tonysm\TailwindCss\Testing\InteractsWithTailwind;
 
