@@ -143,7 +143,6 @@ abstract class TestCase extends BaseTestCase
     use CreatesApplication;
     use InteractsWithTailwind;
 
-
     protected function setUp(): void
     {
         parent::setUp();
