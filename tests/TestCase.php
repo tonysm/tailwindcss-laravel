@@ -3,7 +3,9 @@
 namespace Tonysm\TailwindCss\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\File;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Tonysm\TailwindCss\Manifest;
 use Tonysm\TailwindCss\TailwindCssServiceProvider;
 
 class TestCase extends Orchestra
@@ -15,6 +17,10 @@ class TestCase extends Orchestra
         Factory::guessFactoryNamesUsing(
             fn (string $modelName) => 'Tonysm\\TailwindCss\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
+
+        if (File::exists($manifestFile = Manifest::path())) {
+            File::delete($manifestFile);
+        }
     }
 
     protected function getPackageProviders($app)
@@ -27,10 +33,5 @@ class TestCase extends Orchestra
     public function getEnvironmentSetUp($app)
     {
         config()->set('database.default', 'testing');
-
-        /*
-        $migration = include __DIR__.'/../database/migrations/create_tailwindcss-laravel_table.php.stub';
-        $migration->up();
-        */
     }
 }
