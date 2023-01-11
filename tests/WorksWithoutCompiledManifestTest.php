@@ -1,29 +1,42 @@
 <?php
 
+namespace Tonysm\TailwindCss\Tests;
+
+use Exception;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Tonysm\TailwindCss\Testing\InteractsWithTailwind;
 
-uses(InteractsWithTailwind::class);
+class WorksWithoutCompiledManifestTest extends TestCase
+{
+    use InteractsWithTailwind;
 
-beforeEach(function () {
-    Route::get('_testing/missing-manifest', function () {
-        return View::file(__DIR__ . '/stubs/welcome.blade.php');
-    });
-});
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-it('throws exception when missing manifest', function () {
-    $this->expectException(Exception::class);
-    $this->expectExceptionMessage('The Tailwind CSS manifest does not exist.');
+        Route::get('_testing/missing-manifest', function () {
+            return View::file(__DIR__ . '/stubs/welcome.blade.php');
+        });
+    }
 
-    $this->withoutExceptionHandling()
-        ->get('_testing/missing-manifest');
+    /** @test */
+    public function throws_exception_when_missing_manifest()
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('The Tailwind CSS manifest does not exist.');
 
-    $this->fail('Expected an exception to be thrown, but it did not.');
-});
+        $this->withoutExceptionHandling()
+            ->get('_testing/missing-manifest');
 
-it('works without compiled manifest file', function () {
-    $this->withoutTailwind()
-        ->get('_testing/missing-manifest')
-        ->assertOk();
-});
+        $this->fail('Expected an exception to be thrown, but it did not.');
+    }
+
+    /** @test */
+    public function works_without_compiled_manifest_file()
+    {
+        $this->withoutTailwind()
+            ->get('_testing/missing-manifest')
+            ->assertOk();
+    }
+}
