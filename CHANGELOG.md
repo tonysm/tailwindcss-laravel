@@ -2,6 +2,13 @@
 
 All notable changes to `tailwindcss-laravel` will be documented in this file.
 
+## 0.9.0 - 2023-02-14
+
+### Changelog
+
+- **CHANGED**: Bump the default Tailwind CLI version to `v3.2.6`
+- **CHANGED**: Support for Laravel 10
+
 ## 0.8.0 - 2022-11-17
 
 ### Changelog
