@@ -2,6 +2,14 @@
 
 All notable changes to `tailwindcss-laravel` will be documented in this file.
 
+## 0.10.0 - 2023-05-10
+
+### What's Changed
+
+- Tweaks the install command and tailwind.config stub in https://github.com/tonysm/tailwindcss-laravel/commit/8402efe71545473b9d12f3d846fee994b979cec7
+
+**Full Changelog**: https://github.com/tonysm/tailwindcss-laravel/compare/0.9.0...0.10.0
+
 ## 0.9.0 - 2023-02-14
 
 ### Changelog
