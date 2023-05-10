@@ -39,7 +39,7 @@ class InstallCommand extends Command
     private function ensureTailwindConfigExists()
     {
         $this->displayTask('ensuring tailwind.config.js exists', function () {
-            $this->copyStubToAppIfMissing(
+            $this->copyStubToApp(
                 stub: __DIR__ . '/../../stubs/tailwind.config.js',
                 to: base_path('tailwind.config.js'),
             );
@@ -70,6 +70,11 @@ class InstallCommand extends Command
             return;
         }
 
+        $this->copyStubToApp($stub, $to);
+    }
+
+    private function copyStubToApp(string $stub, string $to): void
+    {
         File::ensureDirectoryExists(dirname($to));
         File::copy($stub, $to);
     }
@@ -149,7 +154,7 @@ class InstallCommand extends Command
                 $file,
                 preg_replace(
                     '/(\s*)(<\/head>)/',
-                    "\\1    <link rel=\"stylesheet\" href=\"{{ tailwindcss('css/app.css') }}\">\n\\1\\2",
+                    "\\1    <link rel=\"stylesheet\" href=\"{{ tailwindcss('css/app.css') }}\" />\\1\\2",
                     File::get($file),
                 ),
             ));
