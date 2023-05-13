@@ -2,6 +2,13 @@
 
 All notable changes to `tailwindcss-laravel` will be documented in this file.
 
+## 0.10.1 - 2023-05-13
+
+### What's changed
+
+- Fixed the TailwindCSS Config JS https://github.com/tonysm/tailwindcss-laravel/commit/37632f77cb1aec72c075f1db8b0cbcf17b03df01
+- Bump the Tailwind CLI default version to v3.3.2 https://github.com/tonysm/tailwindcss-laravel/commit/b48c26785cbd02ef6f412f6f76005d28db9b87f3
+
 ## 0.10.0 - 2023-05-10
 
 ### What's Changed
