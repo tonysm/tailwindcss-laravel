@@ -2,6 +2,15 @@
 
 All notable changes to `tailwindcss-laravel` will be documented in this file.
 
+## 0.11.0 - 2023-11-12
+
+### What's Changed
+
+- Fixes installation command not overriding the default `app.css` file even though it's empty
+- Bumps the default TailwindCSS bin version to v3.3.5
+
+**Full Changelog**: https://github.com/tonysm/tailwindcss-laravel/compare/0.10.1...0.11.0
+
 ## 0.10.1 - 2023-05-13
 
 ### What's changed
