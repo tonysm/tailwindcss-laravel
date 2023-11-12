@@ -44,10 +44,12 @@ class InstallCommand extends Command
                 to: base_path('tailwind.config.js'),
             );
 
-            $this->copyStubToAppIfMissing(
-                stub: __DIR__ . '/../../stubs/resources/css/app.css',
-                to: resource_path('css/app.css'),
-            );
+            if (! File::exists($appCssFilePath = resource_path('css/app.css')) || empty(trim(File::get($appCssFilePath)))) {
+                $this->copyStubToApp(
+                    stub: __DIR__ . '/../../stubs/resources/css/app.css',
+                    to: $appCssFilePath,
+                );
+            }
 
             return self::SUCCESS;
         });
