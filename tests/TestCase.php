@@ -33,5 +33,7 @@ class TestCase extends Orchestra
     public function getEnvironmentSetUp($app)
     {
         config()->set('database.default', 'testing');
+        config()->set('app.url', 'http://localhost');
+        config()->set('app.asset_url', 'http://localhost');
     }
 }

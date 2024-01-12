@@ -4,6 +4,7 @@ namespace Tonysm\TailwindCss\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Terminal;
 
 class InstallCommand extends Command
@@ -25,6 +26,7 @@ class InstallCommand extends Command
         $this->ensureTailwindConfigExists();
         $this->ensureTailwindCliBinaryExists();
         $this->addImportStylesToLayouts();
+        $this->installMiddlewareAfter('SubstituteBindings::class', '\Tonysm\TailwindCss\Http\Middleware\AddLinkHeaderForPreloadedAssets::class');
         $this->addIngoreLines();
         $this->runFirstBuild();
 
@@ -119,6 +121,36 @@ class InstallCommand extends Command
 
             return self::SUCCESS;
         });
+    }
+
+    /**
+     * Install the middleware to a group in the application Http Kernel.
+     *
+     * @param  string  $after
+     * @param  string  $name
+     * @param  string  $group
+     * @return void
+     */
+    private function installMiddlewareAfter($after, $name, $group = 'web')
+    {
+        $httpKernel = file_get_contents(app_path('Http/Kernel.php'));
+
+        $middlewareGroups = Str::before(Str::after($httpKernel, '$middlewareGroups = ['), '];');
+        $middlewareGroup = Str::before(Str::after($middlewareGroups, "'$group' => ["), '],');
+
+        if (! Str::contains($middlewareGroup, $name)) {
+            $modifiedMiddlewareGroup = str_replace(
+                $after.',',
+                $after.','.PHP_EOL.'            '.$name.',',
+                $middlewareGroup,
+            );
+
+            file_put_contents(app_path('Http/Kernel.php'), str_replace(
+                $middlewareGroups,
+                str_replace($middlewareGroup, $modifiedMiddlewareGroup, $middlewareGroups),
+                $httpKernel
+            ));
+        }
     }
 
     private function replaceMixStylesToLayouts()
