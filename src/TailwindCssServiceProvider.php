@@ -24,4 +24,9 @@ class TailwindCssServiceProvider extends PackageServiceProvider
                 Commands\WatchCommand::class,
             ]);
     }
+
+    public function packageRegistered()
+    {
+        $this->app->scoped(Manifest::class);
+    }
 }

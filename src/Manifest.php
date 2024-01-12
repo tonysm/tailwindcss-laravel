@@ -8,6 +8,13 @@ use Illuminate\Support\Str;
 
 class Manifest
 {
+    protected array $preloading = [];
+
+    public function assetsForPreloading(): array
+    {
+        return $this->preloading;
+    }
+
     public static function filename(): string
     {
         return basename(self::path());
@@ -18,7 +25,7 @@ class Manifest
         return config('tailwindcss.build.manifest_file_path');
     }
 
-    public function __invoke(string $path)
+    public function __invoke(string $path, $preload = true)
     {
         static $manifests = [];
 
@@ -50,6 +57,12 @@ class Manifest
             }
         }
 
-        return new HtmlString(asset($manifest[$path]));
+        $asset = asset($manifest[$path]);
+
+        if ($preload) {
+            $this->preloading[$asset] = is_array($preload) ? $preload : [];
+        }
+
+        return new HtmlString($asset);
     }
 }
