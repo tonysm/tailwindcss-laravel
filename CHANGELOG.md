@@ -2,6 +2,12 @@
 
 All notable changes to `tailwindcss-laravel` will be documented in this file.
 
+## 0.12.1 - 2024-01-12
+
+### Changelog
+
+- Fix `tailwind.config.js` file requiring plugins that fail
+
 ## 0.12.0 - 2024-01-12
 
 ### What's Changed
