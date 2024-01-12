@@ -51,7 +51,7 @@ class PreloadingHeaderTest extends TestCase
         $response = resolve(AddLinkHeaderForPreloadedAssets::class)->handle(
             Request::create('/'),
             fn () => response('hello world')->withHeaders([
-                'Link' => '</js/app.js>; rel=modulepreload'
+                'Link' => '</js/app.js>; rel=modulepreload',
             ]),
         );
 
