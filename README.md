@@ -126,6 +126,67 @@ php artisan tailwindcss:download
 php artisan tailwindcss:build --prod
 ```
 
+### Preloading Assets as Link Header
+
+If you want to preload the TailwindCSS asset, make sure to add the `AddLinkHeaderForPreloadedAssets` middleware to your `web` route group, such as:
+
+```php
+<?php
+
+namespace App\Http;
+
+use Illuminate\Foundation\Http\Kernel as HttpKernel;
+
+class Kernel extends HttpKernel
+{
+    /** ... */
+    protected $middlewareGroups = [
+        'web' => [
+            // ...
+            \Tonysm\TailwindCss\Http\Middleware\AddLinkHeaderForPreloadedAssets::class,
+        ],
+
+        'api' => [
+            // ...
+        ],
+    ];
+
+    // ...
+}
+```
+
+The package will preload the asset by default. If you're linking an asset like:
+
+```blade
+<link rel="stylesheet" href="{{ tailwindcss('css/app.css') }}">
+```
+
+It will add a Link header to the HTTP response like:
+
+```http
+Link: <http://localhost/css/app.css>; rel=preload; as=style
+```
+
+It will keep any existing `Link` header as well.
+
+If you want to disable preloading with the Link header, set the flag to `false`:
+
+```blade
+<link rel="stylesheet" href="{{ tailwindcss('css/app.css', preload: false) }}">
+```
+
+You may also change or set additional attributes:
+
+```blade
+<link rel="stylesheet" href="{{ tailwindcss('css/app.css', preload: ['crossorigin' => 'anonymous']) }}">
+```
+
+This will generate a preloading header like:
+
+```http
+Link: <http://localhost/css/app.css>; rel=preload; as=style; crossorigin=anonymous
+```
+
 ### Mock Manifest When Testing
 
 The `tailwindcss()` function will throw an exception when the manifest file is missing. However, we don't always need the manifest file when running our tests. You may use the `InteractsWithTailwind` trait in your main TestCase to disable that exception throwing:
