@@ -2,6 +2,14 @@
 
 All notable changes to `tailwindcss-laravel` will be documented in this file.
 
+## 0.12.0 - 2024-01-12
+
+### What's Changed
+
+* Add `Link` header by @tonysm in https://github.com/tonysm/tailwindcss-laravel/pull/28
+
+**Full Changelog**: https://github.com/tonysm/tailwindcss-laravel/compare/0.11.0...0.12.0
+
 ## 0.11.0 - 2023-11-12
 
 ### What's Changed
