@@ -188,6 +188,7 @@ class InstallCommand extends Command
                 $file,
                 preg_replace(
                     '/(\s*)(<\/head>)/',
+                    "\\1    <!-- TailwindCSS Styles -->\\1\\2",
                     "\\1    <link rel=\"stylesheet\" href=\"{{ tailwindcss('css/app.css') }}\" />\\1\\2",
                     File::get($file),
                 ),
