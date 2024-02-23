@@ -153,7 +153,7 @@ class InstallCommand extends Command
         $this->existingLayoutFiles()
             ->each(fn ($file) => File::put(
                 $file,
-                (new AppendTailwindTag)(File::get($file)),
+                (new AppendTailwindTag())(File::get($file)),
             ));
     }
 
