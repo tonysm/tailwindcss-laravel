@@ -2,6 +2,13 @@
 
 All notable changes to `tailwindcss-laravel` will be documented in this file.
 
+## 0.13.1 - 2024-02-23
+
+### Changelog
+
+- **CHANGED**: Bump the Tailwind CLI version at https://github.com/tonysm/tailwindcss-laravel/commit/67a0c1ba51bf21daf70f0d9b5a91eb362681f39d
+- **CHANGED**: Tweaked the install command to only append the Tailwind link tags to the layout instead of replace the vite directive at https://github.com/tonysm/tailwindcss-laravel/commit/3e7c635e37d52642458505d6601645492566475e
+
 ## 0.12.1 - 2024-01-12
 
 ### Changelog
