@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Terminal;
+use Tonysm\TailwindCss\Actions\AppendTailwindTag;
 
 class InstallCommand extends Command
 {
@@ -111,13 +112,7 @@ class InstallCommand extends Command
     private function addImportStylesToLayouts()
     {
         $this->displayTask('updating layouts', function () {
-            if (File::exists(base_path('webpack.mix.js'))) {
-                $this->replaceMixStylesToLayouts();
-            } elseif (File::exists(base_path('vite.config.js'))) {
-                $this->replaceViteStylesToLayouts();
-            } else {
-                $this->appendTailwindStylesToLayouts();
-            }
+            $this->appendTailwindStylesToLayouts();
 
             return self::SUCCESS;
         });
@@ -153,45 +148,12 @@ class InstallCommand extends Command
         }
     }
 
-    private function replaceMixStylesToLayouts()
-    {
-        $this->existingLayoutFiles()
-            ->each(fn ($file) => File::put(
-                $file,
-                str_replace(
-                    "mix('css/app.css')",
-                    "tailwindcss('css/app.css')",
-                    File::get($file),
-                ),
-            ));
-    }
-
-    private function replaceViteStylesToLayouts()
-    {
-        $this->existingLayoutFiles()
-            ->each(fn ($file) => File::put(
-                $file,
-                preg_replace(
-                    '/\@vite\(\[\'resources\/css\/app.css\', \'resources\/js\/app.js\'\]\)/',
-                    "@vite(['resources/js/app.js'])",
-                    File::get($file),
-                ),
-            ));
-
-        $this->appendTailwindStylesToLayouts();
-    }
-
     private function appendTailwindStylesToLayouts()
     {
         $this->existingLayoutFiles()
             ->each(fn ($file) => File::put(
                 $file,
-                preg_replace(
-                    '/(\s*)(<\/head>)/',
-                    "\\1    <!-- TailwindCSS Styles -->\\1\\2",
-                    "\\1    <link rel=\"stylesheet\" href=\"{{ tailwindcss('css/app.css') }}\" />\\1\\2",
-                    File::get($file),
-                ),
+                (new AppendTailwindTag)(File::get($file)),
             ));
     }
 
