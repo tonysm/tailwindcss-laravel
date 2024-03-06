@@ -2,6 +2,18 @@
 
 All notable changes to `tailwindcss-laravel` will be documented in this file.
 
+## 0.14.0 - 2024-03-06
+
+### What's Changed
+
+* Laravel 11.x Compatibility by @laravel-shift in https://github.com/tonysm/tailwindcss-laravel/pull/30
+
+### New Contributors
+
+* @laravel-shift made their first contribution in https://github.com/tonysm/tailwindcss-laravel/pull/30
+
+**Full Changelog**: https://github.com/tonysm/tailwindcss-laravel/compare/0.13.1...0.14.0
+
 ## 0.13.1 - 2024-02-23
 
 ### Changelog
