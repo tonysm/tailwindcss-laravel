@@ -22,8 +22,10 @@ jobs:
         include:
           - laravel: 10.*
             testbench: 8.*
+            collision: ^6.0
           - laravel: 11.*
             testbench: ^9.0
+            collision: ^8.1
         exclude:
           - laravel: 11.*
             php: 8.1
@@ -48,7 +50,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "nesbot/carbon:^2.64.1" --no-interaction --no-update
+          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "nunomaduro/collision:${{ matrix.collision }}" "nesbot/carbon:^2.64.1" --no-interaction --no-update
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
       - name: Execute tests
