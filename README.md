@@ -128,7 +128,9 @@ php artisan tailwindcss:build --prod
 
 ### Preloading Assets as Link Header
 
-If you want to preload the TailwindCSS asset, make sure to add the `AddLinkHeaderForPreloadedAssets` middleware to your `web` route group, such as:
+**For Laravel 10:**
+
+If you want to preload the TailwindCSS asset on Laravel 10, add the `AddLinkHeaderForPreloadedAssets` middleware to your `web` route group in the `app/Http/Kernel.php`:
 
 ```php
 <?php
@@ -153,6 +155,20 @@ class Kernel extends HttpKernel
 
     // ...
 }
+```
+
+**For Laravel 11:**
+
+If you want to preload the TailwindCSS asset on Laravel 11, add the `AddLinkHeaderForPreloadedAssets` middleware to your `web` route group in the `bootstrap/app.php`:
+
+```php
+    // ...
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->web(append: [
+            \Tonysm\TailwindCss\Http\Middleware\AddLinkHeaderForPreloadedAssets::class,
+        ]);
+    })
+    // ...
 ```
 
 The package will preload the asset by default. If you're linking an asset like:
