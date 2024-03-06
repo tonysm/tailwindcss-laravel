@@ -122,7 +122,7 @@ class InstallCommand extends Command
         if (file_exists(base_path('bootstrap/app.php'))) {
             $this->installMiddlewareToBootstrap($middleware);
         } else {
-            $this->installMiddlewareAfter('SubstituteBinding::class', $middleware);
+            $this->installMiddlewareAfter('SubstituteBindings::class', $middleware);
         }
     }
 
