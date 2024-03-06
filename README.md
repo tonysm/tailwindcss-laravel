@@ -28,6 +28,12 @@ You can install the package via composer:
 composer require tonysm/tailwindcss-laravel
 ```
 
+Next, you may run the install command:
+
+```bash
+php artisan tailwindcss:install
+```
+
 Optionally, you can publish the config file with:
 
 ```bash
