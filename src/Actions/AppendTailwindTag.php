@@ -6,6 +6,10 @@ class AppendTailwindTag
 {
     public function __invoke(string $contents)
     {
+        if (str_contains($contents, '{{ tailwindcss(')) {
+            return $contents;
+        }
+
         return preg_replace(
             '/(\s*)(<\/head>)/',
             PHP_EOL."\\1    <!-- TailwindCSS Styles -->".
