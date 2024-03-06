@@ -86,19 +86,21 @@ class InstallCommand extends Command
         $middlewareGroups = Str::before(Str::after($httpKernel, '$middlewareGroups = ['), '];');
         $middlewareGroup = Str::before(Str::after($middlewareGroups, "'$group' => ["), '],');
 
-        if (! Str::contains($middlewareGroup, $name)) {
-            $modifiedMiddlewareGroup = str_replace(
-                $after.',',
-                $after.','.PHP_EOL.'            '.$name.',',
-                $middlewareGroup,
-            );
-
-            file_put_contents(app_path('Http/Kernel.php'), str_replace(
-                $middlewareGroups,
-                str_replace($middlewareGroup, $modifiedMiddlewareGroup, $middlewareGroups),
-                $httpKernel
-            ));
+        if (str_contains($middlewareGroup, $name)) {
+            return;
         }
+
+        $modifiedMiddlewareGroup = str_replace(
+            $after.',',
+            $after.','.PHP_EOL.'            '.$name.',',
+            $middlewareGroup,
+        );
+
+        file_put_contents(app_path('Http/Kernel.php'), str_replace(
+            $middlewareGroups,
+            str_replace($middlewareGroup, $modifiedMiddlewareGroup, $middlewareGroups),
+            $httpKernel
+        ));
     }
 
     private function appendTailwindStylesToLayouts()
@@ -119,10 +121,10 @@ class InstallCommand extends Command
 
     private function installMiddleware(string $middleware)
     {
-        if (file_exists(base_path('bootstrap/app.php'))) {
-            $this->installMiddlewareToBootstrap($middleware);
-        } else {
+        if (file_exists(app_path('Http/Kernel.php'))) {
             $this->installMiddlewareAfter('SubstituteBindings::class', $middleware);
+        } else {
+            $this->installMiddlewareToBootstrap($middleware);
         }
     }
 
