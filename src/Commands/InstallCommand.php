@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Str;
+use Symfony\Component\Process\PhpExecutableFinder;
 use Tonysm\TailwindCss\Actions\AppendTailwindTag;
 
 class InstallCommand extends Command
@@ -172,5 +173,10 @@ class InstallCommand extends Command
         ], function ($_type, $output) {
             $this->output->write($output);
         });
+    }
+
+    protected function phpBinary()
+    {
+        return (new PhpExecutableFinder())->find(false) ?: 'php';
     }
 }
