@@ -3,7 +3,6 @@
 namespace Tonysm\TailwindCss\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Str;
