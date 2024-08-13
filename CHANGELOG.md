@@ -2,6 +2,14 @@
 
 All notable changes to `tailwindcss-laravel` will be documented in this file.
 
+## 0.15.0 - 2024-08-13
+
+### What's Changed
+
+* Bumps Tailwind binary version and tweaks the build command to use the Process facade by @tonysm in https://github.com/tonysm/tailwindcss-laravel/pull/33
+
+**Full Changelog**: https://github.com/tonysm/tailwindcss-laravel/compare/0.14.0...0.15.0
+
 ## 0.14.0 - 2024-03-06
 
 ### What's Changed
