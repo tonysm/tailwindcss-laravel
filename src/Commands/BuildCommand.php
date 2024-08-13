@@ -53,7 +53,7 @@ class BuildCommand extends Command
             ->run(array_filter([
                 $binFile,
                 '-i', $sourcePath,
-                '-o', $destinationPath,
+                '-o', $destinationFileAbsolutePath,
                 $this->option('watch') ? '-w' : null,
                 $this->shouldMinify() ? '-m' : null,
             ]), function ($type, $output) {
