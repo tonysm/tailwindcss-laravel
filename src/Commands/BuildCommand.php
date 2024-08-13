@@ -4,7 +4,7 @@ namespace Tonysm\TailwindCss\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Symfony\Component\Process\Process;
+use Illuminate\Support\Facades\Process;
 use Tonysm\TailwindCss\Manifest;
 
 class BuildCommand extends Command
@@ -16,6 +16,7 @@ class BuildCommand extends Command
         {--digest : If you want the final CSS file to be generated using a digest of its contents (does not work with the --watch flag).}
         {--prod : This option combines the --minify and --digest options. Ideal for production.}
     ';
+
     protected $description = 'Generates a new build of Tailwind CSS for your project.';
 
     public function handle()
@@ -33,7 +34,7 @@ class BuildCommand extends Command
         $sourcePath = $this->fixFilePathForOs(config('tailwindcss.build.source_file_path'));
         $sourceRelativePath = str_replace(rtrim(resource_path(), DIRECTORY_SEPARATOR), '', $sourcePath);
         $destinationPath = $this->fixFilePathForOs(config('tailwindcss.build.destination_path'));
-        $destinationFileAbsolutePath = $destinationPath . DIRECTORY_SEPARATOR . trim($sourceRelativePath, DIRECTORY_SEPARATOR);
+        $destinationFileAbsolutePath = $destinationPath.DIRECTORY_SEPARATOR.trim($sourceRelativePath, DIRECTORY_SEPARATOR);
         $destinationFileRelativePath = str_replace(rtrim(public_path(), DIRECTORY_SEPARATOR), '', $destinationFileAbsolutePath);
 
         File::ensureDirectoryExists(dirname($destinationFileAbsolutePath));
@@ -46,19 +47,18 @@ class BuildCommand extends Command
             ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         }
 
-        $process = new Process(array_filter([
-            $binFile,
-            '-i', $sourcePath,
-            '-o', $destinationFileAbsolutePath,
-            $this->option('watch') ? '-w' : null,
-            $this->shouldMinify() ? '-m' : null,
-        ]), timeout: null);
-        $process->setWorkingDirectory(base_path());
-        $process->setPty(true);
-
-        $process->run(function ($type, $buffer) {
-            $this->output->write($buffer);
-        });
+        Process::forever()
+            ->tty(true)
+            ->path(base_path())
+            ->run(array_filter([
+                $binFile,
+                '-i', $sourcePath,
+                '-o', $destinationFileAbsolutePath,
+                $this->option('watch') ? '-w' : null,
+                $this->shouldMinify() ? '-m' : null,
+            ]), function ($type, $output) {
+                $this->output->write($output);
+            });
 
         if ($this->shouldVersion()) {
             $destinationFileAbsolutePath = $this->ensureAssetIsVersioned($destinationFileAbsolutePath);
