@@ -38,13 +38,13 @@ class InstallCommand extends Command
     private function ensureTailwindConfigExists()
     {
         $this->copyStubToApp(
-            stub: __DIR__ . '/../../stubs/tailwind.config.js',
+            stub: __DIR__.'/../../stubs/tailwind.config.js',
             to: base_path('tailwind.config.js'),
         );
 
         if (! File::exists($appCssFilePath = resource_path('css/app.css')) || empty(trim(File::get($appCssFilePath)))) {
             $this->copyStubToApp(
-                stub: __DIR__ . '/../../stubs/resources/css/app.css',
+                stub: __DIR__.'/../../stubs/resources/css/app.css',
                 to: $appCssFilePath,
             );
         }
@@ -53,7 +53,7 @@ class InstallCommand extends Command
     private function ensureTailwindCliBinaryExists()
     {
         if (! File::exists(config('tailwindcss.bin_path')) || $this->option('download')) {
-            Process::forever()->run([
+            Process::forever()->tty(PHP_OS != 'WINNT' && is_writable('/dev/tty'))->run([
                 $this->phpBinary(),
                 'artisan',
                 'tailwindcss:download',
@@ -168,7 +168,7 @@ class InstallCommand extends Command
 
     private function runFirstBuild()
     {
-        Process::forever()->run([
+        Process::forever()->tty(PHP_OS != 'WINNT' && is_writable('/dev/tty'))->run([
             $this->phpBinary(),
             'artisan',
             'tailwindcss:build',

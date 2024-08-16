@@ -48,7 +48,7 @@ class BuildCommand extends Command
         }
 
         Process::forever()
-            ->tty(true)
+            ->tty(PHP_OS != 'WINNT' && is_writable('/dev/tty'))
             ->path(base_path())
             ->run(array_filter([
                 $binFile,
