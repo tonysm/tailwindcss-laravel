@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Str;
 use Symfony\Component\Process\PhpExecutableFinder;
+use Symfony\Component\Process\Process as SymfonyProcess;
 use Tonysm\TailwindCss\Actions\AppendTailwindTag;
 
 class InstallCommand extends Command
@@ -53,7 +54,7 @@ class InstallCommand extends Command
     private function ensureTailwindCliBinaryExists()
     {
         if (! File::exists(config('tailwindcss.bin_path')) || $this->option('download')) {
-            Process::forever()->tty(PHP_OS != 'WINNT' && is_writable('/dev/tty'))->run([
+            Process::forever()->tty(SymfonyProcess::isTtySupported())->run([
                 $this->phpBinary(),
                 'artisan',
                 'tailwindcss:download',
@@ -168,7 +169,7 @@ class InstallCommand extends Command
 
     private function runFirstBuild()
     {
-        Process::forever()->tty(PHP_OS != 'WINNT' && is_writable('/dev/tty'))->run([
+        Process::forever()->tty(SymfonyProcess::isTtySupported())->run([
             $this->phpBinary(),
             'artisan',
             'tailwindcss:build',

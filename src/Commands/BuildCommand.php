@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Process;
 use Tonysm\TailwindCss\Manifest;
+use Symfony\Component\Process\Process as SymfonyProcess;
 
 class BuildCommand extends Command
 {
@@ -48,7 +49,7 @@ class BuildCommand extends Command
         }
 
         Process::forever()
-            ->tty(PHP_OS != 'WINNT' && is_writable('/dev/tty'))
+            ->tty(SymfonyProcess::isTtySupported())
             ->path(base_path())
             ->run(array_filter([
                 $binFile,
