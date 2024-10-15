@@ -5,8 +5,8 @@ namespace Tonysm\TailwindCss\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Process;
-use Tonysm\TailwindCss\Manifest;
 use Symfony\Component\Process\Process as SymfonyProcess;
+use Tonysm\TailwindCss\Manifest;
 
 class BuildCommand extends Command
 {
