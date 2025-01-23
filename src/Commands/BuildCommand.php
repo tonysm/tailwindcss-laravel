@@ -35,7 +35,7 @@ class BuildCommand extends Command
         $sourcePath = $this->fixFilePathForOs(config('tailwindcss.build.source_file_path'));
         $sourceRelativePath = str_replace(rtrim(resource_path(), DIRECTORY_SEPARATOR), '', $sourcePath);
         $destinationPath = $this->fixFilePathForOs(config('tailwindcss.build.destination_path'));
-        $destinationFileAbsolutePath = $destinationPath.DIRECTORY_SEPARATOR.trim($sourceRelativePath, DIRECTORY_SEPARATOR);
+        $destinationFileAbsolutePath = $destinationPath . DIRECTORY_SEPARATOR . trim($sourceRelativePath, DIRECTORY_SEPARATOR);
         $destinationFileRelativePath = str_replace(rtrim(public_path(), DIRECTORY_SEPARATOR), '', $destinationFileAbsolutePath);
 
         File::ensureDirectoryExists(dirname($destinationFileAbsolutePath));
@@ -55,7 +55,7 @@ class BuildCommand extends Command
                 $binFile,
                 '-i', $sourcePath,
                 '-o', $destinationFileAbsolutePath,
-                $this->option('watch') ? '-w' : null,
+                $this->option('watch') ? '--watch=always' : null,
                 $this->shouldMinify() ? '-m' : null,
             ]), function ($type, $output) {
                 $this->output->write($output);
@@ -79,6 +79,21 @@ class BuildCommand extends Command
         return self::SUCCESS;
     }
 
+    protected function ensureAssetIsVersioned(string $generatedFile): string
+    {
+        $digest = sha1_file($generatedFile);
+
+        $versionedFile = preg_replace(
+            '/(\.css)$/',
+            sprintf('-%s$1', $digest),
+            $generatedFile,
+        );
+
+        File::move($generatedFile, $versionedFile);
+
+        return $versionedFile;
+    }
+
     private function fixFilePathForOs(string $path): string
     {
         return str_replace('/', DIRECTORY_SEPARATOR, $path);
@@ -97,20 +112,5 @@ class BuildCommand extends Command
     private function shouldMinify(): bool
     {
         return $this->option('minify') || $this->option('prod');
-    }
-
-    protected function ensureAssetIsVersioned(string $generatedFile): string
-    {
-        $digest = sha1_file($generatedFile);
-
-        $versionedFile = preg_replace(
-            '/(\.css)$/',
-            sprintf('-%s$1', $digest),
-            $generatedFile,
-        );
-
-        File::move($generatedFile, $versionedFile);
-
-        return $versionedFile;
     }
 }
