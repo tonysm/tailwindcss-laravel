@@ -18,6 +18,8 @@ class DownloadCommand extends Command
 
     public function handle()
     {
+        ini_set('memory_limit', '1024M');
+
         $os = php_uname('s');
         $cpu = php_uname('m');
 
