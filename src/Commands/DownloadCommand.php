@@ -18,8 +18,6 @@ class DownloadCommand extends Command
 
     public function handle()
     {
-        ini_set('memory_limit', '1024M');
-
         $os = php_uname('s');
         $cpu = php_uname('m');
 
@@ -51,7 +49,7 @@ class DownloadCommand extends Command
         $contents = Http::timeout($this->option('timeout'))
             ->get($this->downloadUrl($targetArchitecture, $targetVersion))
             ->throw()
-            ->body();
+            ->resource();
 
         if (! $contents) {
             $this->error('Something went wrong when trying to download the Tailwind CSS binary.');
