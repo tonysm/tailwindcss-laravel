@@ -2,6 +2,14 @@
 
 All notable changes to `tailwindcss-laravel` will be documented in this file.
 
+## 1.1.0 - 2025-01-27
+
+### What's Changed
+
+* Upgrade to Tailwind V4 by @tonysm in https://github.com/tonysm/tailwindcss-laravel/pull/37
+
+**Full Changelog**: https://github.com/tonysm/tailwindcss-laravel/compare/1.0.2...1.1.0
+
 ## 0.15.0 - 2024-08-13
 
 ### What's Changed
