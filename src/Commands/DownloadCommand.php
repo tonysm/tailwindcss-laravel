@@ -49,7 +49,7 @@ class DownloadCommand extends Command
         $contents = Http::timeout($this->option('timeout'))
             ->get($this->downloadUrl($targetArchitecture, $targetVersion))
             ->throw()
-            ->body();
+            ->resource();
 
         if (! $contents) {
             $this->error('Something went wrong when trying to download the Tailwind CSS binary.');

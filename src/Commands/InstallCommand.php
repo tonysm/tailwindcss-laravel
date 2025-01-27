@@ -36,16 +36,21 @@ class InstallCommand extends Command
         return self::SUCCESS;
     }
 
+    protected function phpBinary()
+    {
+        return (new PhpExecutableFinder())->find(false) ?: 'php';
+    }
+
     private function ensureTailwindConfigExists()
     {
         $this->copyStubToApp(
-            stub: __DIR__.'/../../stubs/tailwind.config.js',
-            to: base_path('tailwind.config.js'),
+            stub: __DIR__ . '/../../stubs/postcss.config.js',
+            to: base_path('postcss.config.js'),
         );
 
         if (! File::exists($appCssFilePath = resource_path('css/app.css')) || empty(trim(File::get($appCssFilePath)))) {
             $this->copyStubToApp(
-                stub: __DIR__.'/../../stubs/resources/css/app.css',
+                stub: __DIR__ . '/../../stubs/resources/css/app.css',
                 to: $appCssFilePath,
             );
         }
@@ -85,15 +90,15 @@ class InstallCommand extends Command
         $httpKernel = file_get_contents(app_path('Http/Kernel.php'));
 
         $middlewareGroups = Str::before(Str::after($httpKernel, '$middlewareGroups = ['), '];');
-        $middlewareGroup = Str::before(Str::after($middlewareGroups, "'$group' => ["), '],');
+        $middlewareGroup = Str::before(Str::after($middlewareGroups, "'{$group}' => ["), '],');
 
         if (str_contains($middlewareGroup, $name)) {
             return;
         }
 
         $modifiedMiddlewareGroup = str_replace(
-            $after.',',
-            $after.','.PHP_EOL.'            '.$name.',',
+            $after . ',',
+            $after . ',' . PHP_EOL . '            ' . $name . ',',
             $middlewareGroup,
         );
 
@@ -140,10 +145,10 @@ class InstallCommand extends Command
         $bootstrapApp = str_replace(
             '->withMiddleware(function (Middleware $middleware) {',
             '->withMiddleware(function (Middleware $middleware) {'
-                .PHP_EOL."        \$middleware->$group($modifier: ["
-                .PHP_EOL."            $middleware,"
-                .PHP_EOL.'        ]);'
-                .PHP_EOL,
+                . PHP_EOL . "        \$middleware->{$group}({$modifier}: ["
+                . PHP_EOL . "            {$middleware},"
+                . PHP_EOL . '        ]);'
+                . PHP_EOL,
             $bootstrapApp,
         );
 
@@ -176,10 +181,5 @@ class InstallCommand extends Command
         ], function ($_type, $output) {
             $this->output->write($output);
         });
-    }
-
-    protected function phpBinary()
-    {
-        return (new PhpExecutableFinder())->find(false) ?: 'php';
     }
 }
