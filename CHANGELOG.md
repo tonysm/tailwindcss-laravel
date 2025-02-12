@@ -2,6 +2,14 @@
 
 All notable changes to `tailwindcss-laravel` will be documented in this file.
 
+## 1.2.0 - 2025-02-12
+
+### What's Changed
+
+- Fallback to Tailwind V3 in the 1.x tagging. It was my mistake to bump to V4 without a major version. If you switched to V4, use the 2.x tag.
+
+**Full Changelog**: https://github.com/tonysm/tailwindcss-laravel/compare/1.1.0...1.2.0
+
 ## 1.1.0 - 2025-01-27
 
 ### What's Changed
