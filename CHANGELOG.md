@@ -2,6 +2,12 @@
 
 All notable changes to `tailwindcss-laravel` will be documented in this file.
 
+## 2.0.0 - 2025-02-12
+
+### What's Changed
+
+- Upgrades to Tailwind V4.
+
 ## 1.2.0 - 2025-02-12
 
 ### What's Changed
