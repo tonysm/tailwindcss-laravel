@@ -45,8 +45,8 @@ class InstallCommand extends Command
     private function ensureTailwindConfigExists()
     {
         $this->copyStubToApp(
-            stub: __DIR__ . '/../../stubs/postcss.config.js',
-            to: base_path('postcss.config.js'),
+            stub: __DIR__ . '/../../stubs/tailwind.config.js',
+            to: base_path('tailwind.config.js'),
         );
 
         if (! File::exists($appCssFilePath = resource_path('css/app.css')) || empty(trim(File::get($appCssFilePath))) || $this->mainCssIsDefault($appCssFilePath)) {
@@ -113,7 +113,7 @@ class InstallCommand extends Command
     private function appendTailwindStylesToLayouts()
     {
         $this->existingLayoutFiles()
-            ->each(fn ($file) => File::put(
+            ->each(fn($file) => File::put(
                 $file,
                 (new AppendTailwindTag())(File::get($file)),
             ));
@@ -122,8 +122,8 @@ class InstallCommand extends Command
     private function existingLayoutFiles()
     {
         return collect(['app', 'guest'])
-            ->map(fn ($file) => resource_path("views/layouts/{$file}.blade.php"))
-            ->filter(fn ($file) => File::exists($file));
+            ->map(fn($file) => resource_path("views/layouts/{$file}.blade.php"))
+            ->filter(fn($file) => File::exists($file));
     }
 
     private function installMiddleware(string $middleware)
