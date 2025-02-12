@@ -113,7 +113,7 @@ class InstallCommand extends Command
     private function appendTailwindStylesToLayouts()
     {
         $this->existingLayoutFiles()
-            ->each(fn($file) => File::put(
+            ->each(fn ($file) => File::put(
                 $file,
                 (new AppendTailwindTag())(File::get($file)),
             ));
@@ -122,8 +122,8 @@ class InstallCommand extends Command
     private function existingLayoutFiles()
     {
         return collect(['app', 'guest'])
-            ->map(fn($file) => resource_path("views/layouts/{$file}.blade.php"))
-            ->filter(fn($file) => File::exists($file));
+            ->map(fn ($file) => resource_path("views/layouts/{$file}.blade.php"))
+            ->filter(fn ($file) => File::exists($file));
     }
 
     private function installMiddleware(string $middleware)
