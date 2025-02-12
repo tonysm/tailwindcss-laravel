@@ -45,8 +45,8 @@ class InstallCommand extends Command
     private function ensureTailwindConfigExists()
     {
         $this->copyStubToApp(
-            stub: __DIR__ . '/../../stubs/tailwind.config.js',
-            to: base_path('tailwind.config.js'),
+            stub: __DIR__ . '/../../stubs/postcss.config.js',
+            to: base_path('postcss.config.js'),
         );
 
         if (! File::exists($appCssFilePath = resource_path('css/app.css')) || empty(trim(File::get($appCssFilePath))) || $this->mainCssIsDefault($appCssFilePath)) {
