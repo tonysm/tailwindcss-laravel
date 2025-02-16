@@ -15,10 +15,9 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        # os: [ubuntu-latest, windows-latest]
         os: [ubuntu-latest]
         php: [8.1, 8.2]
-        laravel: [10.*, 11.*]
+        laravel: ['10.*', '11.*', '12.*']
         stability: [prefer-lowest, prefer-stable]
         include:
           - laravel: 10.*
@@ -29,6 +28,8 @@ jobs:
             collision: ^8.1
         exclude:
           - laravel: 11.*
+            php: 8.1
+          - laravel: 12.*
             php: 8.1
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
