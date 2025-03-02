@@ -15,7 +15,7 @@ class WorksWithoutCompiledManifestTest extends TestCase
     {
         parent::setUp();
 
-        Route::get('_testing/missing-manifest', fn() => View::file(__DIR__ . '/stubs/welcome.blade.php'));
+        Route::get('_testing/missing-manifest', fn () => View::file(__DIR__.'/stubs/welcome.blade.php'));
     }
 
     #[\PHPUnit\Framework\Attributes\Test]

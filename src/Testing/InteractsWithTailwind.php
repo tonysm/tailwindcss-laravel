@@ -12,7 +12,7 @@ trait InteractsWithTailwind
      */
     protected function withoutTailwind(): static
     {
-        $this->swap(Manifest::class, fn(): \Illuminate\Support\HtmlString => new HtmlString(''));
+        $this->swap(Manifest::class, fn (): \Illuminate\Support\HtmlString => new HtmlString(''));
 
         return $this;
     }

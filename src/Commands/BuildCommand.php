@@ -35,7 +35,7 @@ class BuildCommand extends Command
         $sourcePath = $this->fixFilePathForOs(config('tailwindcss.build.source_file_path'));
         $sourceRelativePath = str_replace(rtrim(resource_path(), DIRECTORY_SEPARATOR), '', $sourcePath);
         $destinationPath = $this->fixFilePathForOs(config('tailwindcss.build.destination_path'));
-        $destinationFileAbsolutePath = $destinationPath . DIRECTORY_SEPARATOR . trim($sourceRelativePath, DIRECTORY_SEPARATOR);
+        $destinationFileAbsolutePath = $destinationPath.DIRECTORY_SEPARATOR.trim($sourceRelativePath, DIRECTORY_SEPARATOR);
         $destinationFileRelativePath = str_replace(rtrim(public_path(), DIRECTORY_SEPARATOR), '', $destinationFileAbsolutePath);
 
         File::ensureDirectoryExists(dirname($destinationFileAbsolutePath));
@@ -109,6 +109,7 @@ class BuildCommand extends Command
         if ($this->option('digest')) {
             return true;
         }
+
         return (bool) $this->option('prod');
     }
 
@@ -117,6 +118,7 @@ class BuildCommand extends Command
         if ($this->option('minify')) {
             return true;
         }
+
         return (bool) $this->option('prod');
     }
 }

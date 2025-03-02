@@ -44,13 +44,13 @@ class InstallCommand extends Command
     private function ensureTailwindConfigExists(): void
     {
         $this->copyStubToApp(
-            stub: __DIR__ . '/../../stubs/postcss.config.js',
+            stub: __DIR__.'/../../stubs/postcss.config.js',
             to: base_path('postcss.config.js'),
         );
 
         if (! File::exists($appCssFilePath = resource_path('css/app.css')) || in_array(trim(File::get($appCssFilePath)), ['', '0'], true) || $this->mainCssIsDefault($appCssFilePath)) {
             $this->copyStubToApp(
-                stub: __DIR__ . '/../../stubs/resources/css/app.css',
+                stub: __DIR__.'/../../stubs/resources/css/app.css',
                 to: $appCssFilePath,
             );
         }
@@ -94,8 +94,8 @@ class InstallCommand extends Command
         }
 
         $modifiedMiddlewareGroup = str_replace(
-            $after . ',',
-            $after . ',' . PHP_EOL . '            ' . $name . ',',
+            $after.',',
+            $after.','.PHP_EOL.'            '.$name.',',
             $middlewareGroup,
         );
 
@@ -142,10 +142,10 @@ class InstallCommand extends Command
         $bootstrapApp = str_replace(
             '->withMiddleware(function (Middleware $middleware) {',
             '->withMiddleware(function (Middleware $middleware) {'
-                . PHP_EOL . "        \$middleware->{$group}({$modifier}: ["
-                . PHP_EOL . "            {$middleware},"
-                . PHP_EOL . '        ]);'
-                . PHP_EOL,
+                .PHP_EOL."        \$middleware->{$group}({$modifier}: ["
+                .PHP_EOL."            {$middleware},"
+                .PHP_EOL.'        ]);'
+                .PHP_EOL,
             $bootstrapApp,
         );
 

@@ -12,7 +12,7 @@ class AppendTailwindTag
 
         return preg_replace(
             '/(\s*)(<\/head>)/',
-            PHP_EOL."\\1    <!-- TailwindCSS Styles -->".
+            PHP_EOL.'\\1    <!-- TailwindCSS Styles -->'.
             "\\1    <link rel=\"stylesheet\" href=\"{{ tailwindcss('css/app.css') }}\" />\\1\\2",
             $contents,
         );
