@@ -6,7 +6,9 @@ use Tonysm\TailwindCss\Manifest;
 
 class AddLinkHeaderForPreloadedAssets
 {
-    public function __construct(private readonly Manifest $manifest) {}
+    public function __construct(private readonly Manifest $manifest)
+    {
+    }
 
     public function handle($request, $next)
     {

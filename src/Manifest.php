@@ -53,6 +53,7 @@ class Manifest
 
                 return $path;
             }
+
             throw $exception;
         }
 

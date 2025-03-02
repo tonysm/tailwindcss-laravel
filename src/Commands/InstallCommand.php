@@ -38,7 +38,7 @@ class InstallCommand extends Command
 
     protected function phpBinary(): string
     {
-        return (new PhpExecutableFinder)->find(false) ?: 'php';
+        return (new PhpExecutableFinder())->find(false) ?: 'php';
     }
 
     private function ensureTailwindConfigExists(): void
@@ -111,7 +111,7 @@ class InstallCommand extends Command
         $this->existingLayoutFiles()
             ->each(fn ($file) => File::put(
                 $file,
-                (new AppendTailwindTag)(File::get($file)),
+                (new AppendTailwindTag())(File::get($file)),
             ));
     }
 
