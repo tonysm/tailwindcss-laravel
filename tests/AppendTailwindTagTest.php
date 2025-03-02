@@ -6,8 +6,8 @@ use Tonysm\TailwindCss\Actions\AppendTailwindTag;
 
 class AppendTailwindTagTest extends TestCase
 {
-    /** @test */
-    public function append_tailwind_tag_before_closing_head_tag()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function append_tailwind_tag_before_closing_head_tag(): void
     {
         $contents = <<<'BLADE'
         <html>

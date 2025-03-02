@@ -16,7 +16,7 @@ class DownloadCommand extends Command
 
     protected $description = 'Downloads the Tailwind CSS binary for the version specified in your config/tailwindcss.php.';
 
-    public function handle()
+    public function handle(): int
     {
         $os = php_uname('s');
         $cpu = php_uname('m');
@@ -57,8 +57,10 @@ class DownloadCommand extends Command
             return self::FAILURE;
         }
 
-        File::ensureDirectoryExists(dirname($targetPath));
-        File::exists($targetPath) && File::delete($targetPath);
+        File::ensureDirectoryExists(dirname((string) $targetPath));
+        if (File::exists($targetPath)) {
+            File::delete($targetPath);
+        }
         File::put($targetPath, $contents);
         File::chmod($targetPath, 0755);
 

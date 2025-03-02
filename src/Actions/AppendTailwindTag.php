@@ -4,7 +4,7 @@ namespace Tonysm\TailwindCss\Actions;
 
 class AppendTailwindTag
 {
-    public function __invoke(string $contents)
+    public function __invoke(string $contents): ?string
     {
         if (str_contains($contents, '{{ tailwindcss(')) {
             return $contents;

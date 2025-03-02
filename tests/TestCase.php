@@ -15,7 +15,7 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Tonysm\\TailwindCss\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn (string $modelName): string => 'Tonysm\\TailwindCss\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
 
         if (File::exists($manifestFile = Manifest::path())) {
@@ -30,7 +30,7 @@ class TestCase extends Orchestra
         ];
     }
 
-    public function getEnvironmentSetUp($app)
+    public function getEnvironmentSetUp($app): void
     {
         config()->set('database.default', 'testing');
         config()->set('app.url', 'http://localhost');
