@@ -20,7 +20,7 @@ class BuildCommand extends Command
 
     protected $description = 'Generates a new build of Tailwind CSS for your project.';
 
-    public function handle()
+    public function handle(): int
     {
         $binFile = config('tailwindcss.bin_path');
 
@@ -35,7 +35,7 @@ class BuildCommand extends Command
         $sourcePath = $this->fixFilePathForOs(config('tailwindcss.build.source_file_path'));
         $sourceRelativePath = str_replace(rtrim(resource_path(), DIRECTORY_SEPARATOR), '', $sourcePath);
         $destinationPath = $this->fixFilePathForOs(config('tailwindcss.build.destination_path'));
-        $destinationFileAbsolutePath = $destinationPath . DIRECTORY_SEPARATOR . trim($sourceRelativePath, DIRECTORY_SEPARATOR);
+        $destinationFileAbsolutePath = $destinationPath.DIRECTORY_SEPARATOR.trim($sourceRelativePath, DIRECTORY_SEPARATOR);
         $destinationFileRelativePath = str_replace(rtrim(public_path(), DIRECTORY_SEPARATOR), '', $destinationFileAbsolutePath);
 
         File::ensureDirectoryExists(dirname($destinationFileAbsolutePath));
@@ -57,7 +57,7 @@ class BuildCommand extends Command
                 '-o', $destinationFileAbsolutePath,
                 $this->option('watch') ? '--watch=always' : null,
                 $this->shouldMinify() ? '-m' : null,
-            ]), function ($type, $output) {
+            ]), function ($type, $output): void {
                 $this->output->write($output);
             });
 
@@ -106,11 +106,19 @@ class BuildCommand extends Command
 
     private function shouldVersion(): bool
     {
-        return $this->option('digest') || $this->option('prod');
+        if ($this->option('digest')) {
+            return true;
+        }
+
+        return (bool) $this->option('prod');
     }
 
     private function shouldMinify(): bool
     {
-        return $this->option('minify') || $this->option('prod');
+        if ($this->option('minify')) {
+            return true;
+        }
+
+        return (bool) $this->option('prod');
     }
 }

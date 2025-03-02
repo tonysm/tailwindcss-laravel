@@ -13,9 +13,7 @@ jobs:
           ref: ${{ github.head_ref }}
 
       - name: Run PHP CS Fixer
-        uses: docker://oskarstark/php-cs-fixer-ga
-        with:
-          args: --config=.php_cs.dist.php --allow-risky=yes
+        uses: aglipanci/laravel-pint-action@2.3.0
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5

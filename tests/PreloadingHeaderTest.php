@@ -7,8 +7,8 @@ use Tonysm\TailwindCss\Http\Middleware\AddLinkHeaderForPreloadedAssets;
 
 class PreloadingHeaderTest extends TestCase
 {
-    /** @test */
-    public function no_link_header_when_not_preloading()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function no_link_header_when_not_preloading(): void
     {
         config()->set('tailwindcss.build.manifest_file_path', __DIR__.'/stubs/test-manifest.json');
 
@@ -24,8 +24,8 @@ class PreloadingHeaderTest extends TestCase
         $this->assertNull($response->headers->get('Link', null));
     }
 
-    /** @test */
-    public function adds_link_header_when_preloading()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function adds_link_header_when_preloading(): void
     {
         config()->set('tailwindcss.build.manifest_file_path', __DIR__.'/stubs/test-manifest.json');
 
@@ -41,8 +41,8 @@ class PreloadingHeaderTest extends TestCase
         $this->assertEquals("<{$asset}>; rel=preload; as=style", $response->headers->get('Link', null));
     }
 
-    /** @test */
-    public function keeps_existing_preloading_link_header()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function keeps_existing_preloading_link_header(): void
     {
         config()->set('tailwindcss.build.manifest_file_path', __DIR__.'/stubs/test-manifest.json');
 
@@ -60,8 +60,8 @@ class PreloadingHeaderTest extends TestCase
         $this->assertEquals("</js/app.js>; rel=modulepreload, <{$asset}>; rel=preload; as=style", $response->headers->get('Link', null));
     }
 
-    /** @test */
-    public function adds_link_header_when_preloading_custom_attributes()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function adds_link_header_when_preloading_custom_attributes(): void
     {
         config()->set('tailwindcss.build.manifest_file_path', __DIR__.'/stubs/test-manifest.json');
 

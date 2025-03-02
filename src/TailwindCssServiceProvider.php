@@ -25,7 +25,7 @@ class TailwindCssServiceProvider extends PackageServiceProvider
             ]);
     }
 
-    public function packageRegistered()
+    public function packageRegistered(): void
     {
         $this->app->scoped(Manifest::class);
     }

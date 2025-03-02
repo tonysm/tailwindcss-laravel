@@ -25,7 +25,7 @@ class Manifest
         return config('tailwindcss.build.manifest_file_path');
     }
 
-    public function __invoke(string $path, $preload = true)
+    public function __invoke(string $path, $preload = true): string|\Illuminate\Support\HtmlString
     {
         static $manifests = [];
 
@@ -52,9 +52,9 @@ class Manifest
                 report($exception);
 
                 return $path;
-            } else {
-                throw $exception;
             }
+
+            throw $exception;
         }
 
         $asset = asset($manifest[$path]);

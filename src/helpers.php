@@ -7,9 +7,7 @@ if (! function_exists('tailwindcss')) {
     /**
      * Get the path to a versioned TailwindCSS file.
      *
-     * @param string $path
-     * @param bool|array $preload
-     * @return \Illuminate\Support\HtmlString|string
+     * @param  bool|array  $preload
      */
     function tailwindcss(string $path, $preload = true): HtmlString|string
     {

@@ -15,13 +15,11 @@ class WorksWithoutCompiledManifestTest extends TestCase
     {
         parent::setUp();
 
-        Route::get('_testing/missing-manifest', function () {
-            return View::file(__DIR__ . '/stubs/welcome.blade.php');
-        });
+        Route::get('_testing/missing-manifest', fn () => View::file(__DIR__.'/stubs/welcome.blade.php'));
     }
 
-    /** @test */
-    public function throws_exception_when_missing_manifest()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function throws_exception_when_missing_manifest(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('The Tailwind CSS manifest does not exist.');
@@ -32,8 +30,8 @@ class WorksWithoutCompiledManifestTest extends TestCase
         $this->fail('Expected an exception to be thrown, but it did not.');
     }
 
-    /** @test */
-    public function works_without_compiled_manifest_file()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function works_without_compiled_manifest_file(): void
     {
         $this->withoutTailwind()
             ->get('_testing/missing-manifest')

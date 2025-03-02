@@ -20,7 +20,7 @@ class InstallCommand extends Command
 
     protected $description = 'Installs the Tailwind CSS scaffolding for new Laravel applications.';
 
-    public function handle()
+    public function handle(): int
     {
         $this->ensureTailwindConfigExists();
         $this->ensureTailwindCliBinaryExists();
@@ -28,36 +28,35 @@ class InstallCommand extends Command
         $this->installMiddleware('\Tonysm\TailwindCss\Http\Middleware\AddLinkHeaderForPreloadedAssets::class');
         $this->addIngoreLines();
         $this->runFirstBuild();
-        $this->removeUnusedFiles();
 
         $this->newLine();
 
-        $this->components->info('TailwindCSS Laravel was installed successfully.');
+        $this->components->info('Tailwind CSS Laravel was installed successfully.');
 
         return self::SUCCESS;
     }
 
-    protected function phpBinary()
+    protected function phpBinary(): string
     {
-        return (new PhpExecutableFinder())->find(false) ?: 'php';
+        return (new PhpExecutableFinder)->find(false) ?: 'php';
     }
 
-    private function ensureTailwindConfigExists()
+    private function ensureTailwindConfigExists(): void
     {
         $this->copyStubToApp(
-            stub: __DIR__ . '/../../stubs/postcss.config.js',
+            stub: __DIR__.'/../../stubs/postcss.config.js',
             to: base_path('postcss.config.js'),
         );
 
-        if (! File::exists($appCssFilePath = resource_path('css/app.css')) || empty(trim(File::get($appCssFilePath))) || $this->mainCssIsDefault($appCssFilePath)) {
+        if (! File::exists($appCssFilePath = resource_path('css/app.css')) || in_array(trim(File::get($appCssFilePath)), ['', '0'], true) || $this->mainCssIsDefault($appCssFilePath)) {
             $this->copyStubToApp(
-                stub: __DIR__ . '/../../stubs/resources/css/app.css',
+                stub: __DIR__.'/../../stubs/resources/css/app.css',
                 to: $appCssFilePath,
             );
         }
     }
 
-    private function ensureTailwindCliBinaryExists()
+    private function ensureTailwindCliBinaryExists(): void
     {
         if (! File::exists(config('tailwindcss.bin_path')) || $this->option('download')) {
             Process::forever()->tty(SymfonyProcess::isTtySupported())->run([
@@ -66,7 +65,7 @@ class InstallCommand extends Command
                 'tailwindcss:download',
                 '--cli-version',
                 $this->option('cli-version') ?: config('tailwindcss.version'),
-            ], function ($_type, $output) {
+            ], function ($_type, $output): void {
                 $this->output->write($output);
             });
         }
@@ -81,12 +80,9 @@ class InstallCommand extends Command
     /**
      * Install the middleware to a group in the application Http Kernel.
      *
-     * @param  string  $after
-     * @param  string  $name
      * @param  string  $group
-     * @return void
      */
-    private function installMiddlewareAfter($after, $name, $group = 'web')
+    private function installMiddlewareAfter(string $after, string $name, $group = 'web'): void
     {
         $httpKernel = file_get_contents(app_path('Http/Kernel.php'));
 
@@ -98,8 +94,8 @@ class InstallCommand extends Command
         }
 
         $modifiedMiddlewareGroup = str_replace(
-            $after . ',',
-            $after . ',' . PHP_EOL . '            ' . $name . ',',
+            $after.',',
+            $after.','.PHP_EOL.'            '.$name.',',
             $middlewareGroup,
         );
 
@@ -110,12 +106,12 @@ class InstallCommand extends Command
         ));
     }
 
-    private function appendTailwindStylesToLayouts()
+    private function appendTailwindStylesToLayouts(): void
     {
         $this->existingLayoutFiles()
             ->each(fn ($file) => File::put(
                 $file,
-                (new AppendTailwindTag())(File::get($file)),
+                (new AppendTailwindTag)(File::get($file)),
             ));
     }
 
@@ -126,7 +122,7 @@ class InstallCommand extends Command
             ->filter(fn ($file) => File::exists($file));
     }
 
-    private function installMiddleware(string $middleware)
+    private function installMiddleware(string $middleware): void
     {
         if (file_exists(app_path('Http/Kernel.php'))) {
             $this->installMiddlewareAfter('SubstituteBindings::class', $middleware);
@@ -135,7 +131,7 @@ class InstallCommand extends Command
         }
     }
 
-    private function installMiddlewareToBootstrap(string $middleware, string $group = 'web', string $modifier = 'append')
+    private function installMiddlewareToBootstrap(string $middleware, string $group = 'web', string $modifier = 'append'): void
     {
         $bootstrapApp = file_get_contents(base_path('bootstrap/app.php'));
 
@@ -146,19 +142,19 @@ class InstallCommand extends Command
         $bootstrapApp = str_replace(
             '->withMiddleware(function (Middleware $middleware) {',
             '->withMiddleware(function (Middleware $middleware) {'
-                . PHP_EOL . "        \$middleware->{$group}({$modifier}: ["
-                . PHP_EOL . "            {$middleware},"
-                . PHP_EOL . '        ]);'
-                . PHP_EOL,
+                .PHP_EOL."        \$middleware->{$group}({$modifier}: ["
+                .PHP_EOL."            {$middleware},"
+                .PHP_EOL.'        ]);'
+                .PHP_EOL,
             $bootstrapApp,
         );
 
         file_put_contents(base_path('bootstrap/app.php'), $bootstrapApp);
     }
 
-    private function addIngoreLines()
+    private function addIngoreLines(): void
     {
-        $binary = basename(config('tailwindcss.bin_path'));
+        $binary = basename((string) config('tailwindcss.bin_path'));
 
         if (str_contains(File::get(base_path('.gitignore')), $binary)) {
             return;
@@ -173,26 +169,15 @@ class InstallCommand extends Command
         LINES);
     }
 
-    private function runFirstBuild()
+    private function runFirstBuild(): void
     {
         Process::forever()->tty(SymfonyProcess::isTtySupported())->run([
             $this->phpBinary(),
             'artisan',
             'tailwindcss:build',
-        ], function ($_type, $output) {
+        ], function ($_type, $output): void {
             $this->output->write($output);
         });
-    }
-
-    private function removeUnusedFiles()
-    {
-        $files = [
-            base_path('tailwind.config.js'),
-        ];
-
-        foreach ($files as $file) {
-            File::exists($file) && File::delete($file);
-        }
     }
 
     private function mainCssIsDefault($appCssFilePath): bool
