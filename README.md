@@ -66,7 +66,7 @@ There are some files needed for the setup to work. On a fresh Laravel applicatio
 php artisan tailwindcss:install
 ```
 
-This will ensure there's a `tailwind.config.js` file at the root of your project, as well as a `resources/css/app.css` file with the basic Tailwind CSS setup.
+This will publish a new `resources/css/app.css` main Tailwind CSS file. Make sure you [upgrade your application to Tailwind V4](https://tailwindcss.com/docs/upgrade-guide).
 
 ### Building
 
