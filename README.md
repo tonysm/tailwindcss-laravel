@@ -28,6 +28,8 @@ You can install the package via composer:
 composer require tonysm/tailwindcss-laravel
 ```
 
+_Attention: Version 2.x requires Tailwind V4. Make sure your application was upgraded to it or install version 1.x instead._
+
 Next, you may run the install command:
 
 ```bash
