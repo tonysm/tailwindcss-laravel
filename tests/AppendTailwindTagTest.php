@@ -40,6 +40,6 @@ class AppendTailwindTagTest extends TestCase
         </html>
         BLADE;
 
-        $this->assertEquals($expected, (new AppendTailwindTag())($contents));
+        $this->assertEquals($expected, (new AppendTailwindTag)($contents));
     }
 }
