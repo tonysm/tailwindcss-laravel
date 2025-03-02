@@ -28,7 +28,6 @@ class InstallCommand extends Command
         $this->installMiddleware('\Tonysm\TailwindCss\Http\Middleware\AddLinkHeaderForPreloadedAssets::class');
         $this->addIngoreLines();
         $this->runFirstBuild();
-        $this->removeUnusedFiles();
 
         $this->newLine();
 
@@ -39,7 +38,7 @@ class InstallCommand extends Command
 
     protected function phpBinary()
     {
-        return (new PhpExecutableFinder())->find(false) ?: 'php';
+        return (new PhpExecutableFinder)->find(false) ?: 'php';
     }
 
     private function ensureTailwindConfigExists()
@@ -115,7 +114,7 @@ class InstallCommand extends Command
         $this->existingLayoutFiles()
             ->each(fn ($file) => File::put(
                 $file,
-                (new AppendTailwindTag())(File::get($file)),
+                (new AppendTailwindTag)(File::get($file)),
             ));
     }
 
@@ -182,17 +181,6 @@ class InstallCommand extends Command
         ], function ($_type, $output) {
             $this->output->write($output);
         });
-    }
-
-    private function removeUnusedFiles()
-    {
-        $files = [
-            base_path('tailwind.config.js'),
-        ];
-
-        foreach ($files as $file) {
-            File::exists($file) && File::delete($file);
-        }
     }
 
     private function mainCssIsDefault($appCssFilePath): bool
