@@ -20,7 +20,6 @@
         "illuminate/contracts": "^11.0|^12.0"
     },
     "require-dev": {
-        "nunomaduro/collision": "^8.1|^9.0",
         "orchestra/testbench": "^9.0|^10.0",
         "phpunit/phpunit": "^10.5|^11.0"
     },
