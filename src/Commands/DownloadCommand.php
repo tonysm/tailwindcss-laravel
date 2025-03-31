@@ -5,6 +5,7 @@ namespace Tonysm\TailwindCss\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
+use RuntimeException;
 
 class DownloadCommand extends Command
 {
@@ -46,22 +47,25 @@ class DownloadCommand extends Command
 
         $this->info(sprintf('Downloading the Tailwind CSS binary (%s/%s/%s)...', $os, $cpu, $targetVersion));
 
-        $contents = Http::timeout($this->option('timeout'))
-            ->get($this->downloadUrl($targetArchitecture, $targetVersion))
-            ->throw()
-            ->resource();
-
-        if (! $contents) {
-            $this->error('Something went wrong when trying to download the Tailwind CSS binary.');
-
-            return self::FAILURE;
-        }
-
         File::ensureDirectoryExists(dirname((string) $targetPath));
+
         if (File::exists($targetPath)) {
             File::delete($targetPath);
         }
-        File::put($targetPath, $contents);
+
+        $handle = fopen($targetPath, 'w');
+
+        Http::timeout($this->option('timeout'))
+            ->sink($targetPath)
+            ->throw()
+            ->get($this->downloadUrl($targetArchitecture, $targetVersion));
+
+        fclose($handle);
+
+        if (File::size($targetPath) === 0) {
+            throw new RuntimeException('The downloaded binary file is empty.');
+        }
+
         File::chmod($targetPath, 0755);
 
         $this->info('Done!');
