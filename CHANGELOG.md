@@ -2,6 +2,14 @@
 
 All notable changes to `tailwindcss-laravel` will be documented in this file.
 
+## 2.2.0 - 2025-03-31
+
+### What's Changed
+
+* Use the HTTP Client's `sink` method for efficiency https://github.com/tonysm/tailwindcss-laravel/commit/f6f425cd4217817f4f2a258df186fb539b4d8cb1
+
+**Full Changelog**: https://github.com/tonysm/tailwindcss-laravel/compare/2.1.0...2.2.0
+
 ## 2.0.0 - 2025-02-12
 
 ### What's Changed
