@@ -16,6 +16,7 @@ class BuildCommand extends Command
         {--minify : If you want the final CSS file to be minified.}
         {--digest : If you want the final CSS file to be generated using a digest of its contents (does not work with the --watch flag).}
         {--prod : This option combines the --minify and --digest options. Ideal for production.}
+        {--no-tty : Disables TTY output mode. Use this in environments where TTY is not supported or causing issues.}
     ';
 
     protected $description = 'Generates a new build of Tailwind CSS for your project.';
@@ -49,7 +50,10 @@ class BuildCommand extends Command
         }
 
         Process::forever()
-            ->tty(SymfonyProcess::isTtySupported())
+            ->when(
+                ! $this->option('no-tty'),
+                fn ($process) => $process->tty(SymfonyProcess::isTtySupported())
+            )
             ->path(base_path())
             ->run(array_filter([
                 $binFile,
