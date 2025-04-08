@@ -2,6 +2,18 @@
 
 All notable changes to `tailwindcss-laravel` will be documented in this file.
 
+## 2.2.1 - 2025-04-08
+
+### What's Changed
+
+* Adds the `no-tty` flag by @gcavanunez in https://github.com/tonysm/tailwindcss-laravel/pull/45
+
+### New Contributors
+
+* @gcavanunez made their first contribution in https://github.com/tonysm/tailwindcss-laravel/pull/45
+
+**Full Changelog**: https://github.com/tonysm/tailwindcss-laravel/compare/2.2.0...2.2.1
+
 ## 2.2.0 - 2025-03-31
 
 ### What's Changed
