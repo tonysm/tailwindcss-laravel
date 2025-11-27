@@ -16,6 +16,7 @@ class InstallCommand extends Command
         tailwindcss:install
         {--download : If you also want to download the Tailwind CSS binary.}
         {--cli-version= : You may override the configured version for the CLI.}
+        {--no-tty : Disables TTY output mode. Use this in environments where TTY is not supported or causing issues.}
     ';
 
     protected $description = 'Installs the Tailwind CSS scaffolding for new Laravel applications.';
@@ -171,13 +172,9 @@ class InstallCommand extends Command
 
     private function runFirstBuild(): void
     {
-        Process::forever()->tty(SymfonyProcess::isTtySupported())->run([
-            $this->phpBinary(),
-            'artisan',
-            'tailwindcss:build',
-        ], function ($_type, $output): void {
-            $this->output->write($output);
-        });
+        $this->call('tailwindcss:build', [
+            '--no-tty' => $this->option('no-tty'),
+        ]);
     }
 
     private function mainCssIsDefault($appCssFilePath): bool
