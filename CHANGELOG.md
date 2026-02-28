@@ -2,6 +2,19 @@
 
 All notable changes to `tailwindcss-laravel` will be documented in this file.
 
+## 2.3.0 - 2026-02-28
+
+### What's Changed
+
+* Add --no-tty option In tailwindcss:install command by @kresnasatya in https://github.com/tonysm/tailwindcss-laravel/pull/54
+* Laravel 13.x Compatibility by @laravel-shift in https://github.com/tonysm/tailwindcss-laravel/pull/56
+
+### New Contributors
+
+* @kresnasatya made their first contribution in https://github.com/tonysm/tailwindcss-laravel/pull/54
+
+**Full Changelog**: https://github.com/tonysm/tailwindcss-laravel/compare/2.2.1...2.3.0
+
 ## 2.2.1 - 2025-04-08
 
 ### What's Changed
