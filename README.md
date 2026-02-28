@@ -1,15 +1,9 @@
 <h1 align="center">Tailwind CSS for Laravel</h1>
 
 <p align="center">
-    <a href="https://packagist.org/packages/tonysm/tailwindcss-laravel">
-        <img src="https://img.shields.io/packagist/dt/tonysm/tailwindcss-laravel.svg?style=flat-square" alt="Total Downloads">
-    </a>
-    <a href="https://packagist.org/packages/tonysm/tailwindcss-laravel">
-        <img src="https://img.shields.io/packagist/v/tonysm/tailwindcss-laravel" alt="Latest Stable Version">
-    </a>
-    <a href="https://packagist.org/packages/tonysm/tailwindcss-laravel">
-        <img src="https://img.shields.io/packagist/l/tonysm/tailwindcss-laravel" alt="License">
-    </a>
+    <a href="https://packagist.org/packages/tonysm/tailwindcss-laravel"><img src="https://img.shields.io/packagist/dt/tonysm/tailwindcss-laravel.svg?style=flat-square" alt="Total Downloads"></a>
+    <a href="https://packagist.org/packages/tonysm/tailwindcss-laravel"><img src="https://img.shields.io/packagist/v/tonysm/tailwindcss-laravel" alt="Latest Stable Version"></a>
+    <a href="https://packagist.org/packages/tonysm/tailwindcss-laravel"><img src="https://img.shields.io/packagist/l/tonysm/tailwindcss-laravel" alt="License"></a>
 </p>
 
 ## Introduction
