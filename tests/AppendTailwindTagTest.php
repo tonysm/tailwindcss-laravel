@@ -2,11 +2,12 @@
 
 namespace Tonysm\TailwindCss\Tests;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tonysm\TailwindCss\Actions\AppendTailwindTag;
 
 class AppendTailwindTagTest extends TestCase
 {
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function append_tailwind_tag_before_closing_head_tag(): void
     {
         $contents = <<<'BLADE'

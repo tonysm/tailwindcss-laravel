@@ -25,7 +25,7 @@ class Manifest
         return config('tailwindcss.build.manifest_file_path');
     }
 
-    public function __invoke(string $path, $preload = true): string|\Illuminate\Support\HtmlString
+    public function __invoke(string $path, $preload = true): string|HtmlString
     {
         static $manifests = [];
 
