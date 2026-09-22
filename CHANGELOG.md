@@ -2,6 +2,14 @@
 
 All notable changes to `tailwindcss-laravel` will be documented in this file.
 
+## 2.3.1 - 2026-09-22
+
+### What's Changed
+
+* Bump the base TailwindCSS version to v4.3.3
+
+**Full Changelog**: https://github.com/tonysm/tailwindcss-laravel/compare/2.3.0...2.3.1
+
 ## 2.3.0 - 2026-02-28
 
 ### What's Changed
