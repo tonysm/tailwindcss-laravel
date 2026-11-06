@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use RuntimeException;
+use Throwable;
 
 class DownloadCommand extends Command
 {
@@ -49,23 +50,27 @@ class DownloadCommand extends Command
 
         File::ensureDirectoryExists(dirname((string) $targetPath));
 
-        if (File::exists($targetPath)) {
-            File::delete($targetPath);
+        // Failed responses are also written to the sink, so we only touch the target after a successful download...
+        $temporaryPath = "{$targetPath}.download";
+
+        try {
+            Http::timeout($this->option('timeout'))
+                ->sink($temporaryPath)
+                ->throw()
+                ->get($this->downloadUrl($targetArchitecture, $targetVersion));
+
+            if (File::size($temporaryPath) === 0) {
+                throw new RuntimeException('The downloaded binary file is empty.');
+            }
+        } catch (Throwable $e) {
+            File::delete($temporaryPath);
+
+            $this->error(sprintf('Could not download the Tailwind CSS binary: %s', $e->getMessage()));
+
+            return self::FAILURE;
         }
 
-        $handle = fopen($targetPath, 'w');
-
-        Http::timeout($this->option('timeout'))
-            ->sink($targetPath)
-            ->throw()
-            ->get($this->downloadUrl($targetArchitecture, $targetVersion));
-
-        fclose($handle);
-
-        if (File::size($targetPath) === 0) {
-            throw new RuntimeException('The downloaded binary file is empty.');
-        }
-
+        File::move($temporaryPath, $targetPath);
         File::chmod($targetPath, 0755);
 
         $this->info('Done!');
