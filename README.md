@@ -102,6 +102,31 @@ php artisan tailwindcss:watch
 
 _Note: the watch command is not meant to be used in combination with `--digest` or `--minify` flags._
 
+Only one watcher runs per application. If one is already running, the watch command waits and takes over when the other one stops.
+
+You may use the `--download` flag to download the Tailwind CSS binary if it's missing:
+
+```bash
+php artisan tailwindcss:watch --download
+```
+
+### Starting the Watcher Automatically
+
+When `APP_ENV=local`, the package starts the watcher for you, downloading the binary if it's missing:
+
+- **`php artisan dev`** (Laravel 13.16+): the watcher runs as its own `tailwindcss` process. You can see it with `php artisan dev:list`, or skip it with `DevCommands::except('tailwindcss')`.
+- **`php artisan serve`**: the watcher starts in the background and stops when the server stops.
+
+You may explicitly enable or disable this with the `TAILWINDCSS_DAEMON` env var:
+
+```env
+TAILWINDCSS_DAEMON=false
+```
+
+_Note: a watch build replaces any compiled assets in the destination directory, so don't enable this in production._
+
+_Note: if your app runs in a container (like Laravel Sail), the binary must match the container's platform. A binary downloaded on a macOS host won't run in a Linux container, so run the download command inside the container instead._
+
 ### Using the Compiled Asset
 
 To use the compiled asset, you may use the `tailwindcss` helper function instead of the `mix` function like so:

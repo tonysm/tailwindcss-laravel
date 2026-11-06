@@ -40,4 +40,16 @@ return [
      |
      */
     'version' => env('TAILWINDCSS_CLI_VERSION', 'v4.3.3'),
+
+    /*
+     |---------------------------------------------------------------------
+     | Start the watcher automatically.
+     |---------------------------------------------------------------------
+     |
+     | When enabled, the watcher runs in the background alongside `php artisan serve`
+     | and `php artisan dev`. Only enable it where you're developing, since a watch
+     | build replaces any compiled assets that are in the destination directory.
+     |
+     */
+    'daemon' => env('TAILWINDCSS_DAEMON', env('APP_ENV', 'production') === 'local'),
 ];
