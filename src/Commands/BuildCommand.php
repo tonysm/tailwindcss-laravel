@@ -4,8 +4,7 @@ namespace Tonysm\TailwindCss\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Illuminate\Process\FakeInvokedProcess;
-use Illuminate\Process\InvokedProcess;
+use Illuminate\Contracts\Process\InvokedProcess;
 use Illuminate\Support\Facades\Process;
 use Symfony\Component\Process\InputStream;
 use Symfony\Component\Process\Process as SymfonyProcess;
@@ -98,15 +97,12 @@ class BuildCommand extends Command
         return self::SUCCESS;
     }
 
-    private function runUntilParentExits(InvokedProcess|FakeInvokedProcess $process, int $parentPid): void
+    /**
+     * The binary is stopped when the process instance is destroyed, right after this returns.
+     */
+    private function runUntilParentExits(InvokedProcess $process, int $parentPid): void
     {
-        while ($process->running()) {
-            if (! DaemonLauncher::processIsRunning($parentPid)) {
-                $process->stop();
-
-                return;
-            }
-
+        while ($process->running() && DaemonLauncher::processIsRunning($parentPid)) {
             usleep(100_000);
         }
     }
