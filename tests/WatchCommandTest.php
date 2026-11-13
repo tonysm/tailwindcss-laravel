@@ -167,6 +167,30 @@ class WatchCommandTest extends TestCase
             && $process->input === null);
     }
 
+    #[Test]
+    public function build_fails_when_the_binary_fails(): void
+    {
+        File::put($this->binPath, 'existing');
+
+        Process::fake(['*' => Process::result(errorOutput: 'Syntax error', exitCode: 1)]);
+
+        $this->artisan('tailwindcss:build', ['--prod' => true, '--no-tty' => true])
+            ->expectsOutputToContain('The Tailwind CSS binary failed with exit code 1.')
+            ->assertFailed();
+    }
+
+    #[Test]
+    public function watch_fails_when_the_binary_exits_with_an_error_while_parent_is_running(): void
+    {
+        File::put($this->binPath, 'existing');
+
+        Process::fake(['*' => Process::describe()->exitCode(1)]);
+
+        $this->artisan('tailwindcss:watch', ['--no-tty' => true, '--parent-pid' => getmypid()])
+            ->expectsOutputToContain('The Tailwind CSS binary failed with exit code 1.')
+            ->assertFailed();
+    }
+
     private function deadPid(): int
     {
         $process = proc_open([PHP_BINARY, '-r', ''], [], $pipes);

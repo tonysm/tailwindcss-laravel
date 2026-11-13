@@ -5,6 +5,7 @@ namespace Tonysm\TailwindCss\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Contracts\Process\InvokedProcess;
+use Illuminate\Contracts\Process\ProcessResult;
 use Illuminate\Support\Facades\Process;
 use Symfony\Component\Process\InputStream;
 use Symfony\Component\Process\Process as SymfonyProcess;
@@ -73,10 +74,14 @@ class BuildCommand extends Command
             $this->output->write($output);
         };
 
-        if ($parentPid = (int) $this->option('parent-pid')) {
-            $this->runUntilParentExits($process->start($command, $output), $parentPid);
-        } else {
-            $process->run($command, $output);
+        $result = ($parentPid = (int) $this->option('parent-pid'))
+            ? $this->runUntilParentExits($process->start($command, $output), $parentPid)
+            : $process->run($command, $output);
+
+        if ($result?->failed()) {
+            $this->error(sprintf('The Tailwind CSS binary failed with exit code %s.', $result->exitCode() ?? 'unknown'));
+
+            return self::FAILURE;
         }
 
         if ($this->shouldVersion()) {
@@ -98,13 +103,27 @@ class BuildCommand extends Command
     }
 
     /**
-     * The binary is stopped when the process instance is destroyed, right after this returns.
+     * Returns the binary's result if it exits on its own, or null if the parent exits first. In
+     * that case, the binary is stopped when the process instance is destroyed, right after this
+     * returns. We check the parent at most once a second, since that may spawn a process.
      */
-    private function runUntilParentExits(InvokedProcess $process, int $parentPid): void
+    private function runUntilParentExits(InvokedProcess $process, int $parentPid): ?ProcessResult
     {
-        while ($process->running() && DaemonLauncher::processIsRunning($parentPid)) {
+        $nextParentCheckAt = 0;
+
+        while ($process->running()) {
+            if (microtime(true) >= $nextParentCheckAt) {
+                if (! DaemonLauncher::processIsRunning($parentPid)) {
+                    return null;
+                }
+
+                $nextParentCheckAt = microtime(true) + 1;
+            }
+
             usleep(100_000);
         }
+
+        return $process->wait();
     }
 
     protected function ensureAssetIsVersioned(string $generatedFile): string

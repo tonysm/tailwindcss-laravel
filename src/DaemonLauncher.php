@@ -2,6 +2,9 @@
 
 namespace Tonysm\TailwindCss;
 
+use Symfony\Component\Process\Process;
+use Throwable;
+
 class DaemonLauncher
 {
     /** @var resource|null */
@@ -52,9 +55,8 @@ class DaemonLauncher
 
     public static function processIsRunning(int $pid): bool
     {
-        // Without the posix extension we can't check, so we assume it's running...
         if (! function_exists('posix_kill')) {
-            return true;
+            return static::processIsRunningWithoutPosix($pid);
         }
 
         if (@posix_kill($pid, 0)) {
@@ -63,6 +65,37 @@ class DaemonLauncher
 
         // EPERM means the process exists but belongs to another user...
         return posix_get_last_error() === 1;
+    }
+
+    /**
+     * Fallbacks for when the posix extension isn't available (always the case on Windows).
+     */
+    protected static function processIsRunningWithoutPosix(int $pid): bool
+    {
+        if (PHP_OS_FAMILY === 'Linux' && is_dir('/proc/self')) {
+            return is_dir("/proc/{$pid}");
+        }
+
+        $command = PHP_OS_FAMILY === 'Windows'
+            ? ['tasklist', '/FI', "PID eq {$pid}", '/NH', '/FO', 'CSV']
+            : ['ps', '-p', (string) $pid, '-o', 'pid='];
+
+        try {
+            $process = new Process($command);
+            $process->setTimeout(5);
+            $process->run();
+        } catch (Throwable) {
+            // If we can't check, we assume it's running...
+            return true;
+        }
+
+        if (PHP_OS_FAMILY === 'Windows') {
+            // A match prints a CSV row with the quoted PID. Otherwise, it prints an info message...
+            return ! $process->isSuccessful() || str_contains($process->getOutput(), "\"{$pid}\"");
+        }
+
+        // `ps -p` exits with 1 when there's no such process, and with other codes on errors...
+        return $process->getExitCode() !== 1;
     }
 
     /**
