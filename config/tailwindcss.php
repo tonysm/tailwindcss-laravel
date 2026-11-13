@@ -39,7 +39,7 @@ return [
      | @see https://github.com/tailwindlabs/tailwindcss/releases to know the version availables.
      |
      */
-    'version' => env('TAILWINDCSS_CLI_VERSION', 'v4.3.3'),
+    'version' => env('TAILWINDCSS_CLI_VERSION', 'v4.3.5'),
 
     /*
      |---------------------------------------------------------------------
