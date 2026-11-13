@@ -4,8 +4,12 @@ namespace Tonysm\TailwindCss\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Illuminate\Contracts\Process\InvokedProcess;
+use Illuminate\Contracts\Process\ProcessResult;
 use Illuminate\Support\Facades\Process;
+use Symfony\Component\Process\InputStream;
 use Symfony\Component\Process\Process as SymfonyProcess;
+use Tonysm\TailwindCss\DaemonLauncher;
 use Tonysm\TailwindCss\Manifest;
 
 class BuildCommand extends Command
@@ -17,6 +21,7 @@ class BuildCommand extends Command
         {--digest : If you want the final CSS file to be generated using a digest of its contents (does not work with the --watch flag).}
         {--prod : This option combines the --minify and --digest options. Ideal for production.}
         {--no-tty : Disables TTY output mode. Use this in environments where TTY is not supported or causing issues.}
+        {--parent-pid= : Stops the build when this process exits.}
     ';
 
     protected $description = 'Generates a new build of Tailwind CSS for your project.';
@@ -49,21 +54,35 @@ class BuildCommand extends Command
             ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         }
 
-        Process::forever()
-            ->when(
-                ! $this->option('no-tty'),
-                fn ($process) => $process->tty(SymfonyProcess::isTtySupported())
-            )
-            ->path(base_path())
-            ->run(array_filter([
-                $binFile,
-                '-i', $sourcePath,
-                '-o', $destinationFileAbsolutePath,
-                $this->option('watch') ? '--watch=always' : null,
-                $this->shouldMinify() ? '-m' : null,
-            ]), function ($type, $output): void {
-                $this->output->write($output);
-            });
+        $usesTty = ! $this->option('no-tty') && SymfonyProcess::isTtySupported();
+
+        $process = Process::forever()
+            ->tty($usesTty)
+            // Without a TTY, we hold stdin open. The binary exits when it closes, so it can't outlive us...
+            ->when($this->option('watch') && ! $usesTty, fn ($process) => $process->input(new InputStream))
+            ->path(base_path());
+
+        $command = array_filter([
+            $binFile,
+            '-i', $sourcePath,
+            '-o', $destinationFileAbsolutePath,
+            $this->option('watch') ? ($usesTty ? '--watch=always' : '--watch') : null,
+            $this->shouldMinify() ? '-m' : null,
+        ]);
+
+        $output = function ($type, $output): void {
+            $this->output->write($output);
+        };
+
+        $result = ($parentPid = (int) $this->option('parent-pid'))
+            ? $this->runUntilParentExits($process->start($command, $output), $parentPid)
+            : $process->run($command, $output);
+
+        if ($result?->failed()) {
+            $this->error(sprintf('The Tailwind CSS binary failed with exit code %s.', $result->exitCode() ?? 'unknown'));
+
+            return self::FAILURE;
+        }
 
         if ($this->shouldVersion()) {
             $destinationFileAbsolutePath = $this->ensureAssetIsVersioned($destinationFileAbsolutePath);
@@ -81,6 +100,30 @@ class BuildCommand extends Command
         $this->info('Done!');
 
         return self::SUCCESS;
+    }
+
+    /**
+     * Returns the binary's result if it exits on its own, or null if the parent exits first. In
+     * that case, the binary is stopped when the process instance is destroyed, right after this
+     * returns. We check the parent at most once a second, since that may spawn a process.
+     */
+    private function runUntilParentExits(InvokedProcess $process, int $parentPid): ?ProcessResult
+    {
+        $nextParentCheckAt = 0;
+
+        while ($process->running()) {
+            if (microtime(true) >= $nextParentCheckAt) {
+                if (! DaemonLauncher::processIsRunning($parentPid)) {
+                    return null;
+                }
+
+                $nextParentCheckAt = microtime(true) + 1;
+            }
+
+            usleep(100_000);
+        }
+
+        return $process->wait();
     }
 
     protected function ensureAssetIsVersioned(string $generatedFile): string
