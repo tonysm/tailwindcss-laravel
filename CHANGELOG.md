@@ -2,6 +2,14 @@
 
 All notable changes to `tailwindcss-laravel` will be documented in this file.
 
+## 2.4.0 - 2026-11-13
+
+### What's Changed
+
+* Start the TailwindCSS bin daemon automatically by @tonysm in https://github.com/tonysm/tailwindcss-laravel/pull/66
+
+**Full Changelog**: https://github.com/tonysm/tailwindcss-laravel/compare/2.3.1...2.4.0
+
 ## 2.3.1 - 2026-09-22
 
 ### What's Changed
